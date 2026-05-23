@@ -646,5 +646,26 @@ textarea::placeholder {
     height: 58px;
     border-radius: 50%;
   }
+  .stock-actions input {
+  width: 100px;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+.secondary-button {
+  background: #393e46;
+  color: white;
+  border: 0;
+  border-radius: 14px;
+  padding: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+}
+
+.secondary-button:hover {
+  background: #222831;
+}
 }
 }

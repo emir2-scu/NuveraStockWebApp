@@ -11,6 +11,9 @@ function App() {
   const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("Tüm Ürünler");
 
+  const [editingProductId, setEditingProductId] = useState(null);
+  const [stockAmount, setStockAmount] = useState({});
+
   const [session, setSession] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
 
@@ -19,7 +22,7 @@ function App() {
     password: "",
   });
 
-  const [form, setForm] = useState({
+  const emptyProductForm = {
     name: "",
     category: "",
     material: "",
@@ -28,9 +31,9 @@ function App() {
     productionTime: "",
     description: "",
     image: "",
-  });
+  };
 
-  const [costForm, setCostForm] = useState({
+  const emptyCostForm = {
     productId: "",
     filament: "",
     electricity: "",
@@ -38,7 +41,10 @@ function App() {
     packaging: "",
     extra: "",
     profitRate: "",
-  });
+  };
+
+  const [form, setForm] = useState(emptyProductForm);
+  const [costForm, setCostForm] = useState(emptyCostForm);
 
   useEffect(() => {
     const getCurrentSession = async () => {
@@ -158,6 +164,11 @@ function App() {
     }).length;
   };
 
+  const resetProductForm = () => {
+    setEditingProductId(null);
+    setForm(emptyProductForm);
+  };
+
   const addProduct = async () => {
     if (!form.name || !form.stock) {
       alert("Ürün adı ve stok adedi boş bırakılamaz.");
@@ -183,17 +194,42 @@ function App() {
       return;
     }
 
-    setForm({
-      name: "",
-      category: "",
-      material: "",
-      color: "",
-      stock: "",
-      productionTime: "",
-      description: "",
-      image: "",
-    });
+    resetProductForm();
+    await fetchProducts();
+  };
 
+  const updateProduct = async () => {
+    if (!editingProductId) return;
+
+    if (!form.name || form.stock === "") {
+      alert("Ürün adı ve stok adedi boş bırakılamaz.");
+      return;
+    }
+
+    const updatedProduct = {
+      name: form.name,
+      category: form.category,
+      material: form.material,
+      color: form.color,
+      stock: Number(form.stock),
+      production_time: form.productionTime,
+      description: form.description,
+      image: form.image,
+    };
+
+    const { error } = await supabase
+      .from("products")
+      .update(updatedProduct)
+      .eq("id", editingProductId);
+
+    if (error) {
+      alert("Ürün güncellenirken hata oluştu: " + error.message);
+      return;
+    }
+
+    alert("Ürün başarıyla güncellendi.");
+
+    resetProductForm();
     await fetchProducts();
   };
 
@@ -216,7 +252,12 @@ function App() {
 
     if (!product) return;
 
-    const newStock = Math.max(0, Number(product.stock) + amount);
+    if (!amount || Number(amount) === 0) {
+      alert("Lütfen geçerli bir stok miktarı giriniz.");
+      return;
+    }
+
+    const newStock = Math.max(0, Number(product.stock) + Number(amount));
 
     const { error } = await supabase
       .from("products")
@@ -227,6 +268,11 @@ function App() {
       alert("Stok güncellenirken hata oluştu: " + error.message);
       return;
     }
+
+    setStockAmount({
+      ...stockAmount,
+      [id]: "",
+    });
 
     await fetchProducts();
   };
@@ -281,16 +327,7 @@ function App() {
       return;
     }
 
-    setCostForm({
-      productId: "",
-      filament: "",
-      electricity: "",
-      labor: "",
-      packaging: "",
-      extra: "",
-      profitRate: "",
-    });
-
+    setCostForm(emptyCostForm);
     await fetchCosts();
   };
 
@@ -478,7 +515,7 @@ function App() {
 
             <section className="grid">
               <div className="panel form-panel">
-                <h3>Ürün Ekle</h3>
+                <h3>{editingProductId ? "Ürün Düzenle" : "Ürün Ekle"}</h3>
 
                 <input
                   placeholder="Ürün adı"
@@ -555,9 +592,18 @@ function App() {
                   <img className="preview" src={form.image} alt="Ürün" />
                 )}
 
-                <button className="primary" onClick={addProduct}>
-                  Ürün Ekle
+                <button
+                  className="primary"
+                  onClick={editingProductId ? updateProduct : addProduct}
+                >
+                  {editingProductId ? "Ürünü Güncelle" : "Ürün Ekle"}
                 </button>
+
+                {editingProductId && (
+                  <button className="secondary-button" onClick={resetProductForm}>
+                    Düzenlemeyi İptal Et
+                  </button>
+                )}
               </div>
 
               <div className="panel list-panel">
@@ -589,6 +635,18 @@ function App() {
                         <small>{product.description}</small>
 
                         <div className="stock-actions">
+                          <input
+                            type="number"
+                            placeholder="Miktar"
+                            value={stockAmount[product.id] || ""}
+                            onChange={(e) =>
+                              setStockAmount({
+                                ...stockAmount,
+                                [product.id]: e.target.value,
+                              })
+                            }
+                          />
+
                           <button onClick={() => changeStock(product.id, 1)}>
                             +1
                           </button>
@@ -597,12 +655,50 @@ function App() {
                             -1
                           </button>
 
-                          <button onClick={() => changeStock(product.id, 10)}>
-                            +10
+                          <button
+                            onClick={() =>
+                              changeStock(
+                                product.id,
+                                Number(stockAmount[product.id] || 0)
+                              )
+                            }
+                          >
+                            Stok Artır
                           </button>
 
-                          <button onClick={() => changeStock(product.id, -10)}>
-                            -10
+                          <button
+                            onClick={() =>
+                              changeStock(
+                                product.id,
+                                -Number(stockAmount[product.id] || 0)
+                              )
+                            }
+                          >
+                            Stok Azalt
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              setEditingProductId(product.id);
+
+                              setForm({
+                                name: product.name || "",
+                                category: product.category || "",
+                                material: product.material || "",
+                                color: product.color || "",
+                                stock: product.stock || "",
+                                productionTime: product.production_time || "",
+                                description: product.description || "",
+                                image: product.image || "",
+                              });
+
+                              window.scrollTo({
+                                top: 0,
+                                behavior: "smooth",
+                              });
+                            }}
+                          >
+                            Düzenle
                           </button>
 
                           <button
