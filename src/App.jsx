@@ -8,6 +8,9 @@ function App() {
   const [costs, setCosts] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("Tüm Ürünler");
+
   const [session, setSession] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
 
@@ -40,7 +43,6 @@ function App() {
   useEffect(() => {
     const getCurrentSession = async () => {
       const { data } = await supabase.auth.getSession();
-
       setSession(data.session);
       setAuthLoading(false);
     };
@@ -83,7 +85,6 @@ function App() {
 
   const signOut = async () => {
     await supabase.auth.signOut();
-
     setProducts([]);
     setCosts([]);
     setPage("dashboard");
@@ -123,6 +124,39 @@ function App() {
   const lowStock = products.filter((p) => Number(p.stock) <= 5).length;
   const totalCost = costs.reduce((sum, c) => sum + Number(c.total_cost || 0), 0);
   const totalSale = costs.reduce((sum, c) => sum + Number(c.sale_price || 0), 0);
+
+  const categories = [
+    "Tüm Ürünler",
+    ...Array.from(
+      new Set(
+        products.map((p) => {
+          const category = (p.category || "").trim();
+          return category === "" ? "Kategorisiz" : category;
+        })
+      )
+    ),
+  ];
+
+  const filteredProducts =
+    selectedCategory === "Tüm Ürünler"
+      ? products
+      : products.filter((p) => {
+          const category = (p.category || "").trim();
+          const cleanCategory = category === "" ? "Kategorisiz" : category;
+          return cleanCategory === selectedCategory;
+        });
+
+  const getCategoryCount = (categoryName) => {
+    if (categoryName === "Tüm Ürünler") {
+      return products.length;
+    }
+
+    return products.filter((p) => {
+      const category = (p.category || "").trim();
+      const cleanCategory = category === "" ? "Kategorisiz" : category;
+      return cleanCategory === categoryName;
+    }).length;
+  };
 
   const addProduct = async () => {
     if (!form.name || !form.stock) {
@@ -309,6 +343,46 @@ function App() {
 
   return (
     <div className="app">
+      <button
+        className="category-toggle"
+        onClick={() => setCategoryMenuOpen(true)}
+      >
+        ⋯
+      </button>
+
+      {categoryMenuOpen && (
+        <div
+          className="category-overlay"
+          onClick={() => setCategoryMenuOpen(false)}
+        >
+          <div className="category-drawer" onClick={(e) => e.stopPropagation()}>
+            <div className="category-drawer-header">
+              <h3>Kategoriler</h3>
+              <button onClick={() => setCategoryMenuOpen(false)}>×</button>
+            </div>
+
+            <div className="category-list">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  className={
+                    selectedCategory === category ? "active-category" : ""
+                  }
+                  onClick={() => {
+                    setSelectedCategory(category);
+                    setPage("products");
+                    setCategoryMenuOpen(false);
+                  }}
+                >
+                  <span>{category}</span>
+                  <strong>{getCategoryCount(category)}</strong>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       <aside className="sidebar">
         <div className="brand">
           <h1>NUVERA</h1>
@@ -395,7 +469,10 @@ function App() {
             <header className="page-header">
               <div>
                 <h2>Ürünler</h2>
-                <p>3D ürünleri ekleyin, görsel seçin ve stokları yönetin.</p>
+                <p>
+                  3D ürünleri ekleyin, görsel seçin ve stokları yönetin.
+                  Seçili kategori: <strong>{selectedCategory}</strong>
+                </p>
               </div>
             </header>
 
@@ -487,11 +564,11 @@ function App() {
                 <h3>Ürün Listesi</h3>
 
                 <div className="product-list">
-                  {products.length === 0 && (
-                    <p className="empty">Henüz ürün eklenmedi.</p>
+                  {filteredProducts.length === 0 && (
+                    <p className="empty">Bu kategoride ürün yok.</p>
                   )}
 
-                  {products.map((product) => (
+                  {filteredProducts.map((product) => (
                     <div className="product-card" key={product.id}>
                       {product.image ? (
                         <img src={product.image} alt={product.name} />
