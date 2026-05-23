@@ -69,6 +69,7 @@ select {
   color: #cfd3d6;
   font-size: 14px;
   line-height: 1.5;
+  word-break: break-word;
 }
 
 .content {
@@ -216,6 +217,7 @@ select:focus {
   padding: 14px;
   font-weight: bold;
   cursor: pointer;
+  width: 100%;
 }
 
 .primary:hover {
@@ -317,6 +319,10 @@ select:focus {
   cursor: pointer;
 }
 
+.stock-actions button:hover {
+  background: #00adb5;
+}
+
 .stock-actions .danger {
   background: #e74c3c;
 }
@@ -369,6 +375,57 @@ select:focus {
   margin-bottom: 10px;
 }
 
+/* LOGIN / AUTH SCREEN */
+
+.auth-screen {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #222831, #00adb5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 390px;
+  background: white;
+  border-radius: 24px;
+  padding: 30px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.auth-brand h1 {
+  margin: 0;
+  font-size: 34px;
+  letter-spacing: 2px;
+  color: #222831;
+}
+
+.auth-brand span {
+  display: block;
+  margin-top: 4px;
+  color: #00adb5;
+  font-weight: bold;
+  letter-spacing: 3px;
+}
+
+.auth-card h2 {
+  margin: 28px 0 8px;
+  color: #222831;
+}
+
+.auth-card p {
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.auth-card input {
+  margin-bottom: 12px;
+}
+
+/* MOBILE */
+
 @media (max-width: 850px) {
   .app {
     flex-direction: column;
@@ -379,9 +436,13 @@ select:focus {
     padding: 20px;
   }
 
+  .brand h1 {
+    font-size: 26px;
+  }
+
   .sidebar nav {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .sidebar button {
@@ -427,5 +488,25 @@ select:focus {
   .no-image {
     width: 90px;
     height: 90px;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar nav {
+    grid-template-columns: 1fr;
+  }
+
+  .product-card {
+    grid-template-columns: 1fr;
+  }
+
+  .product-card img,
+  .no-image {
+    width: 100%;
+    height: 180px;
   }
 }
