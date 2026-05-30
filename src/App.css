@@ -1,13 +1,29 @@
 * {
   box-sizing: border-box;
 }
+:root {
+  --dark: #111827;
+  --dark-soft: #1f2937;
+  --bg: #f3f6fb;
+  --card: #ffffff;
+  --text: #111827;
+  --muted: #6b7280;
+  --primary: #00adb5;
+  --primary-dark: #008b92;
+  --green: #22c55e;
+  --yellow: #facc15;
+  --red: #ef4444;
+  --border: #e5e7eb;
+  --shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+}
 
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background: #f4f6f8;
-  color: #222831;
+  background: var(--bg);
+  color: var(--text);
 }
+
 
 button,
 input,
