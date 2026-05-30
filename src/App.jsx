@@ -17,6 +17,7 @@ function App() {
 
   const [session, setSession] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
+  const [showLogin, setShowLogin] = useState(false);
 
   const [authForm, setAuthForm] = useState({
     email: "",
@@ -343,7 +344,86 @@ function App() {
   if (authLoading) {
     return <div className="auth-screen">Yükleniyor...</div>;
   }
+if (!session && !showLogin) {
+  return (
+    <div className="landing-page">
+      <header className="landing-header">
+        <div className="landing-logo">
+          <h1>3D STOK TAKİP</h1>
+          <span>Nuvera Web System</span>
+        </div>
 
+        <button onClick={() => setShowLogin(true)}>Giriş Yap</button>
+      </header>
+
+      <section className="hero-section">
+        <div className="hero-text">
+          <span className="hero-badge">3D Ürün Yönetim Sistemi</span>
+
+          <h2>3D baskı ürünlerinizi tek panelden yönetin.</h2>
+
+          <p>
+            Ürünlerinizi listeleyin, stoklarınızı takip edin, maliyetlerinizi
+            hesaplayın ve satış fiyatlarınızı kolayca yönetin.
+          </p>
+
+          <div className="hero-buttons">
+            <button onClick={() => setShowLogin(true)}>Sisteme Giriş Yap</button>
+            <a href="#features">Özellikleri Gör</a>
+          </div>
+        </div>
+
+        <div className="hero-card">
+          <div className="hero-card-top">
+            <span>Canlı Panel</span>
+            <strong>Online</strong>
+          </div>
+
+          <div className="hero-stat">
+            <span>Ürün Takibi</span>
+            <strong>Kolay</strong>
+          </div>
+
+          <div className="hero-stat">
+            <span>Stok Yönetimi</span>
+            <strong>Senkron</strong>
+          </div>
+
+          <div className="hero-stat">
+            <span>Maliyet Hesabı</span>
+            <strong>Otomatik</strong>
+          </div>
+        </div>
+      </section>
+
+      <section className="features-section" id="features">
+        <div className="feature-card">
+          <div>📦</div>
+          <h3>Ürün Yönetimi</h3>
+          <p>3D baskı ürünlerinizi kategori, malzeme ve renk bilgileriyle kaydedin.</p>
+        </div>
+
+        <div className="feature-card">
+          <div>📊</div>
+          <h3>Stok Takibi</h3>
+          <p>Ürün stoklarını artırın, azaltın ve düşük stokları kolayca takip edin.</p>
+        </div>
+
+        <div className="feature-card">
+          <div>💰</div>
+          <h3>Maliyet Hesabı</h3>
+          <p>Filament, elektrik, işçilik ve kâr oranına göre satış fiyatı hesaplayın.</p>
+        </div>
+
+        <div className="feature-card">
+          <div>☁️</div>
+          <h3>Online Senkron</h3>
+          <p>Telefon ve bilgisayardan aynı verilere ulaşın, kayıtlarınız kaybolmasın.</p>
+        </div>
+      </section>
+    </div>
+  );
+}
   if (!session) {
     return (
       <div className="auth-screen">
@@ -355,6 +435,9 @@ function App() {
 
           <h2>Giriş Yap</h2>
           <p>Stok sistemine erişmek için mail ve şifrenizi girin.</p>
+          <button className="back-to-landing" onClick={() => setShowLogin(false)}>
+  ← Tanıtım Sayfasına Dön
+</button>
 
           <input
             type="email"
