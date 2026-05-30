@@ -731,4 +731,25 @@ select:focus {
   .sidebar nav {
     grid-template-columns: 1fr;
   }
+  .nav-active {
+  background: linear-gradient(135deg, var(--primary), #14b8a6) !important;
+  box-shadow: 0 12px 28px rgba(0, 173, 181, 0.25);
+}
+
+.product-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.product-tags span {
+  background: white;
+  border: 1px solid var(--border);
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+}
 }

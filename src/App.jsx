@@ -434,11 +434,35 @@ function App() {
         </div>
 
         <nav>
-          <button onClick={() => setPage("dashboard")}>Ana Panel</button>
-          <button onClick={() => setPage("products")}>Ürünler</button>
-          <button onClick={() => setPage("costs")}>Maliyet</button>
-          <button onClick={() => setPage("reports")}>Raporlar</button>
-          <button onClick={signOut}>Çıkış Yap</button>
+          <button
+            className={page === "dashboard" ? "nav-active" : ""}
+            onClick={() => setPage("dashboard")}
+          >
+            📊 Ana Panel
+          </button>
+
+          <button
+            className={page === "products" ? "nav-active" : ""}
+            onClick={() => setPage("products")}
+          >
+            📦 Ürünler
+          </button>
+
+          <button
+            className={page === "costs" ? "nav-active" : ""}
+            onClick={() => setPage("costs")}
+          >
+            💰 Maliyet
+          </button>
+
+          <button
+            className={page === "reports" ? "nav-active" : ""}
+            onClick={() => setPage("reports")}
+          >
+            📈 Raporlar
+          </button>
+
+          <button onClick={signOut}>🚪 Çıkış Yap</button>
         </nav>
 
         <p className="side-note">
@@ -620,10 +644,11 @@ function App() {
                       <div className="product-info">
                         <h4>{product.name}</h4>
 
-                        <p>
-                          {product.category} • {product.material} •{" "}
-                          {product.color}
-                        </p>
+                        <div className="product-tags">
+                          <span>{product.category || "Kategorisiz"}</span>
+                          <span>{product.material || "Malzeme yok"}</span>
+                          <span>{product.color || "Renk yok"}</span>
+                        </div>
 
                         <span>Stok: {product.stock}</span>
 
