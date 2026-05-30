@@ -486,28 +486,39 @@ function App() {
                 {loading ? "Yükleniyor..." : "Online Senkron"}
               </span>
             </header>
+<section className="stats">
+  <div className="stat-card">
+    <div className="stat-icon">📦</div>
+    <div>
+      <span>Toplam Ürün</span>
+      <strong>{products.length}</strong>
+    </div>
+  </div>
 
-            <section className="stats">
-              <div className="stat-card">
-                <span>Toplam Ürün</span>
-                <strong>{products.length}</strong>
-              </div>
+  <div className="stat-card green">
+    <div className="stat-icon">📊</div>
+    <div>
+      <span>Toplam Stok</span>
+      <strong>{totalStock}</strong>
+    </div>
+  </div>
 
-              <div className="stat-card green">
-                <span>Toplam Stok</span>
-                <strong>{totalStock}</strong>
-              </div>
+  <div className="stat-card yellow">
+    <div className="stat-icon">⚠️</div>
+    <div>
+      <span>Düşük Stok</span>
+      <strong>{lowStock}</strong>
+    </div>
+  </div>
 
-              <div className="stat-card yellow">
-                <span>Düşük Stok</span>
-                <strong>{lowStock}</strong>
-              </div>
-
-              <div className="stat-card red">
-                <span>Tahmini Kâr</span>
-                <strong>{(totalSale - totalCost).toFixed(2)} TL</strong>
-              </div>
-            </section>
+  <div className="stat-card red">
+    <div className="stat-icon">💸</div>
+    <div>
+      <span>Tahmini Kâr</span>
+      <strong>{(totalSale - totalCost).toFixed(2)} TL</strong>
+    </div>
+  </div>
+</section>
 
             <section className="panel">
               <h3>Genel Finans Özeti</h3>
