@@ -486,11 +486,8 @@ select:focus {
     grid-template-columns: 1fr;
   }
 
-  .product-card img,
-  .no-image {
-    width: 100%;
-    height: 180px;
-  }
+
+  
   input,
 textarea,
 select {
