@@ -35,29 +35,62 @@ select {
 .app {
   min-height: 100vh;
   display: flex;
+  background:
+    radial-gradient(circle at top right, rgba(0, 173, 181, 0.12), transparent 30%),
+    linear-gradient(135deg, #f8fafc, #eef3f8);
 }
 
+
 .sidebar {
-  width: 260px;
-  background: #222831;
+  width: 280px;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #111827, #1f2937);
   color: white;
-  padding: 28px 22px;
+  padding: 30px 22px;
   display: flex;
   flex-direction: column;
   gap: 28px;
+  position: sticky;
+  top: 0;
+  box-shadow: 8px 0 30px rgba(15, 23, 42, 0.12);
+}
+
+.brand {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 22px;
+}
+
+.brand {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 22px;
+}
+.brand {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 22px;
 }
 
 .brand h1 {
   margin: 0;
-  font-size: 30px;
-  letter-spacing: 2px;
+  font-size: 32px;
+  letter-spacing: 4px;
+  line-height: 1;
 }
 
 .brand span {
-  color: #00adb5;
-  font-weight: bold;
-  letter-spacing: 3px;
+  display: block;
+  margin-top: 8px;
+  color: var(--primary);
+  font-weight: 800;
+  letter-spacing: 4px;
+  font-size: 13px;
 }
+
 
 .sidebar nav {
   display: flex;
@@ -66,19 +99,23 @@ select {
 }
 
 .sidebar button {
-  background: #393e46;
-  border: 0;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   color: white;
-  padding: 14px 16px;
-  border-radius: 14px;
+  padding: 15px 16px;
+  border-radius: 18px;
   text-align: left;
-  font-weight: bold;
+  font-weight: 800;
   cursor: pointer;
 }
 
+
 .sidebar button:hover {
-  background: #00adb5;
+  background: var(--primary);
+  transform: translateX(4px);
+  box-shadow: 0 10px 25px rgba(0, 173, 181, 0.28);
 }
+
 
 .side-note {
   margin-top: auto;
