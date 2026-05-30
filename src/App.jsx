@@ -144,24 +144,24 @@ function App() {
     ),
   ];
 
-const filteredProducts = products.filter((p) => {
-  const category = (p.category || "").trim();
-  const cleanCategory = category === "" ? "Kategorisiz" : category;
+  const filteredProducts = products.filter((p) => {
+    const category = (p.category || "").trim();
+    const cleanCategory = category === "" ? "Kategorisiz" : category;
 
-  const categoryMatch =
-    selectedCategory === "Tüm Ürünler" || cleanCategory === selectedCategory;
+    const categoryMatch =
+      selectedCategory === "Tüm Ürünler" || cleanCategory === selectedCategory;
 
-  const search = searchText.toLowerCase();
+    const search = searchText.toLowerCase();
 
-  const searchMatch =
-    (p.name || "").toLowerCase().includes(search) ||
-    (p.category || "").toLowerCase().includes(search) ||
-    (p.material || "").toLowerCase().includes(search) ||
-    (p.color || "").toLowerCase().includes(search) ||
-    (p.description || "").toLowerCase().includes(search);
+    const searchMatch =
+      (p.name || "").toLowerCase().includes(search) ||
+      (p.category || "").toLowerCase().includes(search) ||
+      (p.material || "").toLowerCase().includes(search) ||
+      (p.color || "").toLowerCase().includes(search) ||
+      (p.description || "").toLowerCase().includes(search);
 
-  return categoryMatch && searchMatch;
-});
+    return categoryMatch && searchMatch;
+  });
 
   const getCategoryCount = (categoryName) => {
     if (categoryName === "Tüm Ürünler") {
@@ -239,7 +239,6 @@ const filteredProducts = products.filter((p) => {
     }
 
     alert("Ürün başarıyla güncellendi.");
-
     resetProductForm();
     await fetchProducts();
   };
@@ -461,33 +460,6 @@ const filteredProducts = products.filter((p) => {
                 <h2>Ana Panel</h2>
                 <p>Ürün, stok, maliyet ve satış durumunu buradan takip edin.</p>
               </div>
-              <div className="search-box">
-  <input
-    type="text"
-    placeholder="Ürün adı, kategori, malzeme veya renk ara..."
-    value={searchText}
-    onChange={(e) => setSearchText(e.target.value)}
-  />
-<div className="search-box">
-  <input
-    type="text"
-    placeholder="Ürün adı, kategori, malzeme, renk veya açıklama ara..."
-    value={searchText}
-    onChange={(e) => setSearchText(e.target.value)}
-  />
-
-  {searchText && (
-    <button onClick={() => setSearchText("")}>
-      Temizle
-    </button>
-  )}
-</div>
-  {searchText && (
-    <button onClick={() => setSearchText("")}>
-      Temizle
-    </button>
-  )}
-</div>
 
               <span className="badge">
                 {loading ? "Yükleniyor..." : "Online Senkron"}
@@ -550,6 +522,19 @@ const filteredProducts = products.filter((p) => {
                 </p>
               </div>
             </header>
+
+            <div className="search-box">
+              <input
+                type="text"
+                placeholder="Ürün adı, kategori, malzeme, renk veya açıklama ara..."
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+              />
+
+              {searchText && (
+                <button onClick={() => setSearchText("")}>Temizle</button>
+              )}
+            </div>
 
             <section className="grid">
               <div className="panel form-panel">
@@ -649,7 +634,7 @@ const filteredProducts = products.filter((p) => {
 
                 <div className="product-list">
                   {filteredProducts.length === 0 && (
-                    <p className="empty">Bu kategoride ürün yok.</p>
+                    <p className="empty">Bu kategoride veya aramada ürün yok.</p>
                   )}
 
                   {filteredProducts.map((product) => (
