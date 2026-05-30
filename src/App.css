@@ -247,29 +247,23 @@ select:focus {
   padding: 8px;
 }
 
+.product-list,
+.cost-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
 .product-card {
   display: block;
   background: #f4f6f8;
   border-radius: 18px;
   padding: 18px;
 }
-}
-
-.product-card {
-  display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: 16px;
-  background: #f4f6f8;
-  border-radius: 18px;
-  padding: 14px;
-}
-
-
-
 
 .product-info h4 {
   margin: 0;
-  font-size: 20px;
+  font-size: 22px;
 }
 
 .product-info p {
@@ -297,6 +291,13 @@ select:focus {
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 12px;
+}
+
+.stock-actions input {
+  width: 100px;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
 }
 
 .stock-actions button {
@@ -413,101 +414,8 @@ select:focus {
   margin-bottom: 12px;
 }
 
-/* MOBILE */
+/* CATEGORY DRAWER */
 
-@media (max-width: 850px) {
-  .app {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    padding: 20px;
-  }
-
-  .brand h1 {
-    font-size: 26px;
-  }
-
-  .sidebar nav {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .sidebar button {
-    text-align: center;
-    padding: 12px 8px;
-    font-size: 13px;
-  }
-
-  .side-note {
-    display: none;
-  }
-
-  .content {
-    padding: 20px;
-  }
-
-  .page-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .page-header h2 {
-    font-size: 30px;
-  }
-
-  .stats {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
-  .finance-row {
-    grid-template-columns: 1fr;
-  }
-
- 
-  }
-
-
-@media (max-width: 480px) {
-  .stats {
-    grid-template-columns: 1fr;
-  }
-
-  .sidebar nav {
-    grid-template-columns: 1fr;
-  }
-
-  .product-card {
-    grid-template-columns: 1fr;
-  }
-
-
-  
-  input,
-textarea,
-select {
-  color: #222831 !important;
-  background-color: #ffffff !important;
-  -webkit-text-fill-color: #222831 !important;
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: #999999 !important;
-  -webkit-text-fill-color: #999999 !important;
-}
-
-.auth-card input {
-  color: #222831 !important;
-  background-color: #ffffff !important;
-  -webkit-text-fill-color: #222831 !important;
-  caret-color: #00adb5;
-}
 .category-toggle {
   position: fixed;
   left: 14px;
@@ -615,37 +523,8 @@ textarea::placeholder {
   border-radius: 999px;
 }
 
-@media (max-width: 850px) {
-  .category-toggle {
-    left: 10px;
-    top: auto;
-    bottom: 18px;
-    transform: none;
-    width: 58px;
-    height: 58px;
-    border-radius: 50%;
-  }
-  .stock-actions input {
-  width: 100px;
-  padding: 8px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-}
+/* SEARCH */
 
-.secondary-button {
-  background: #393e46;
-  color: white;
-  border: 0;
-  border-radius: 14px;
-  padding: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  width: 100%;
-}
-
-.secondary-button:hover {
-  background: #222831;
-}
 .search-box {
   background: white;
   border-radius: 18px;
@@ -674,6 +553,91 @@ textarea::placeholder {
   background: #222831;
 }
 
+/* SECONDARY BUTTON */
+
+.secondary-button {
+  background: #393e46;
+  color: white;
+  border: 0;
+  border-radius: 14px;
+  padding: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.secondary-button:hover {
+  background: #222831;
+}
+
+/* MOBILE */
+
+@media (max-width: 850px) {
+  .app {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .brand h1 {
+    font-size: 26px;
+  }
+
+  .sidebar nav {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sidebar button {
+    text-align: center;
+    padding: 12px 8px;
+    font-size: 13px;
+  }
+
+  .side-note {
+    display: none;
+  }
+
+  .content {
+    padding: 20px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .page-header h2 {
+    font-size: 30px;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .finance-row {
+    grid-template-columns: 1fr;
+  }
+
+  .category-toggle {
+    left: 10px;
+    top: auto;
+    bottom: 18px;
+    transform: none;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+  }
+}
+
 @media (max-width: 600px) {
   .search-box {
     flex-direction: column;
@@ -683,5 +647,13 @@ textarea::placeholder {
     padding: 12px;
   }
 }
-}
+
+@media (max-width: 480px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar nav {
+    grid-template-columns: 1fr;
+  }
 }
