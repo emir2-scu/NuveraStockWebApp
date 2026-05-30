@@ -342,6 +342,355 @@ function App() {
 
   const costResult = calculateCost();
 
+  const landingCss = `
+    .landing-page {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top right, rgba(0, 173, 181, 0.3), transparent 34%),
+        linear-gradient(135deg, #111827, #0f172a);
+      color: white;
+      padding: 28px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .landing-header {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .landing-logo h1 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: 3px;
+      color: white;
+    }
+
+    .landing-logo span {
+      display: block;
+      margin-top: 6px;
+      color: #00adb5;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    .landing-nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .landing-nav a {
+      color: #cbd5e1;
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .landing-nav button,
+    .hero-buttons button {
+      border: 0;
+      background: linear-gradient(135deg, #00adb5, #14b8a6);
+      color: white;
+      padding: 13px 22px;
+      border-radius: 999px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 15px 35px rgba(0, 173, 181, 0.25);
+    }
+
+    .hero-section {
+      max-width: 1180px;
+      margin: 90px auto 70px;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 42px;
+      align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(0, 173, 181, 0.15);
+      border: 1px solid rgba(0, 173, 181, 0.35);
+      color: #67e8f9;
+      padding: 9px 14px;
+      border-radius: 999px;
+      font-weight: 900;
+      margin-bottom: 20px;
+    }
+
+    .hero-text h2 {
+      margin: 0;
+      font-size: 58px;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      color: white;
+      text-align: left;
+    }
+
+    .hero-text p {
+      color: #cbd5e1;
+      font-size: 18px;
+      line-height: 1.7;
+      max-width: 620px;
+      margin: 24px 0;
+      text-align: left;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .hero-buttons a {
+      text-decoration: none;
+      padding: 15px 22px;
+      border-radius: 16px;
+      font-weight: 900;
+      background: rgba(255, 255, 255, 0.09);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .hero-mini-stats {
+      display: flex;
+      gap: 14px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+    }
+
+    .hero-mini-stats div,
+    .dashboard-grid div,
+    .dashboard-product,
+    .feature-card,
+    .workflow-section div {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 22px;
+      padding: 18px;
+      color: white;
+    }
+
+    .hero-mini-stats strong {
+      display: block;
+      color: white;
+      font-size: 18px;
+    }
+
+    .hero-mini-stats span {
+      display: block;
+      color: #cbd5e1;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .hero-dashboard {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 34px;
+      padding: 28px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.32);
+    }
+
+    .dashboard-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 22px;
+    }
+
+    .dashboard-top span {
+      color: #94a3b8;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .dashboard-top h3 {
+      margin: 6px 0 0;
+      font-size: 28px;
+      color: white;
+    }
+
+    .dashboard-top strong {
+      background: rgba(34, 197, 94, 0.18);
+      color: #86efac;
+      padding: 8px 13px;
+      border-radius: 999px;
+      font-size: 13px;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .dashboard-grid span {
+      display: block;
+      color: #cbd5e1;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .dashboard-grid strong {
+      font-size: 24px;
+      color: white;
+    }
+
+    .dashboard-product {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 12px;
+      align-items: center;
+    }
+
+    .dashboard-product h4 {
+      margin: 0;
+      font-size: 17px;
+      color: white;
+    }
+
+    .dashboard-product p {
+      margin: 6px 0 0;
+      color: #cbd5e1;
+      font-size: 13px;
+    }
+
+    .dashboard-product span {
+      background: linear-gradient(135deg, #00adb5, #14b8a6);
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-weight: 900;
+      white-space: nowrap;
+      font-size: 13px;
+      color: white;
+    }
+
+    .features-section {
+      max-width: 1180px;
+      margin: 0 auto 50px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .feature-card div {
+      font-size: 32px;
+      margin-bottom: 14px;
+    }
+
+    .feature-card h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      color: white;
+    }
+
+    .feature-card p {
+      margin: 0;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+
+    .workflow-section {
+      max-width: 1180px;
+      margin: 28px auto 70px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .workflow-section span {
+      color: #67e8f9;
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+
+    .workflow-section h3 {
+      margin: 12px 0 8px;
+      font-size: 22px;
+      color: white;
+    }
+
+    .workflow-section p {
+      margin: 0;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 900px) {
+      .hero-section {
+        grid-template-columns: 1fr;
+        margin-top: 55px;
+      }
+
+      .hero-text h2 {
+        font-size: 42px;
+      }
+
+      .features-section {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .workflow-section {
+        grid-template-columns: 1fr;
+      }
+
+      .landing-nav {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .landing-page {
+        padding: 20px;
+      }
+
+      .landing-header {
+        align-items: flex-start;
+        gap: 16px;
+        flex-direction: column;
+      }
+
+      .hero-text h2 {
+        font-size: 36px;
+      }
+
+      .features-section {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+      }
+
+      .hero-buttons button,
+      .hero-buttons a {
+        text-align: center;
+      }
+
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .dashboard-product {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hero-mini-stats {
+        flex-direction: column;
+      }
+    }
+  `;
+
   if (authLoading) {
     return <div className="auth-screen">Yükleniyor...</div>;
   }
@@ -349,6 +698,8 @@ function App() {
   if (!session && !showLogin) {
     return (
       <div className="landing-page">
+        <style>{landingCss}</style>
+
         <header className="landing-header">
           <div className="landing-logo">
             <h1>3D STOK TAKİP</h1>
@@ -371,15 +722,13 @@ function App() {
             <h2>Stok, maliyet ve satış fiyatı tek panelde.</h2>
 
             <p>
-              3D baskı ürünlerinizi kategori, malzeme, renk ve stok
-              bilgileriyle yönetin. Maliyetleri hesaplayın, satış fiyatını
-              belirleyin ve tüm verilerinize telefon ya da bilgisayardan ulaşın.
+              3D baskı ürünlerinizi kategori, malzeme, renk ve stok bilgileriyle
+              yönetin. Maliyetleri hesaplayın, satış fiyatını belirleyin ve tüm
+              verilerinize telefon ya da bilgisayardan ulaşın.
             </p>
 
             <div className="hero-buttons">
-              <button onClick={() => setShowLogin(true)}>
-                Panele Giriş Yap
-              </button>
+              <button onClick={() => setShowLogin(true)}>Panele Giriş Yap</button>
               <a href="#features">Sistemi İncele</a>
             </div>
 
@@ -518,7 +867,10 @@ function App() {
           <h2>Giriş Yap</h2>
           <p>Stok sistemine erişmek için mail ve şifrenizi girin.</p>
 
-          <button className="back-to-landing" onClick={() => setShowLogin(false)}>
+          <button
+            className="back-to-landing"
+            onClick={() => setShowLogin(false)}
+          >
             ← Tanıtım Sayfasına Dön
           </button>
 
