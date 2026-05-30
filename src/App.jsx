@@ -1073,15 +1073,18 @@ function App() {
             📈 Raporlar
           </button>
 
+          <button
+            className={page === "settings" ? "nav-active" : ""}
+            onClick={() => setPage("settings")}
+          >
+            ⚙️ Ayarlar
+          </button>
+
           <button onClick={signOut}>🚪 Çıkış Yap</button>
         </nav>
 
         <p className="side-note">
           {session.user.email}
-          <br />
-          Plan: {profile?.plan || "free"}
-          <br />
-          7 gün ücretsiz deneme aktif
           <br />
           <br />
           Supabase senkron aktif
@@ -1132,27 +1135,6 @@ function App() {
                 <div>
                   <span>Tahmini Kâr</span>
                   <strong>{(totalSale - totalCost).toFixed(2)} TL</strong>
-                </div>
-              </div>
-            </section>
-
-            <section className="panel">
-              <h3>Abonelik Durumu</h3>
-
-              <div className="finance-row">
-                <div>
-                  <span>Plan</span>
-                  <strong>{profile?.plan || "free"}</strong>
-                </div>
-
-                <div>
-                  <span>Deneme</span>
-                  <strong>7 Gün</strong>
-                </div>
-
-                <div>
-                  <span>Durum</span>
-                  <strong>Aktif</strong>
                 </div>
               </div>
             </section>
@@ -1555,6 +1537,70 @@ function App() {
                     </div>
                   ))
               )}
+            </section>
+          </>
+        )}
+
+        {page === "settings" && (
+          <>
+            <header className="page-header">
+              <div>
+                <h2>Ayarlar</h2>
+                <p>Hesap, plan ve abonelik bilgilerinizi buradan yönetin.</p>
+              </div>
+            </header>
+
+            <section className="settings-grid">
+              <div className="panel settings-card">
+                <h3>Hesap Bilgileri</h3>
+
+                <div className="settings-row">
+                  <span>E-posta</span>
+                  <strong>{session.user.email}</strong>
+                </div>
+
+                <div className="settings-row">
+                  <span>Hesap Durumu</span>
+                  <strong>Aktif</strong>
+                </div>
+
+                <div className="settings-row">
+                  <span>Veri Senkronizasyonu</span>
+                  <strong>Supabase Aktif</strong>
+                </div>
+              </div>
+
+              <div className="panel settings-card premium-card">
+                <h3>Abonelik Planı</h3>
+
+                <div className="plan-badge">
+                  {profile?.plan === "pro" ? "Pro Plan" : "Free Plan"}
+                </div>
+
+                <p>
+                  Şu anda 7 günlük ücretsiz deneme sürümündesiniz. Deneme
+                  süresi sonunda plan yükseltme alanı aktif edilebilir.
+                </p>
+
+                <div className="settings-row">
+                  <span>Plan</span>
+                  <strong>{profile?.plan || "free"}</strong>
+                </div>
+
+                <div className="settings-row">
+                  <span>Deneme Süresi</span>
+                  <strong>7 Gün</strong>
+                </div>
+
+                <div className="settings-row">
+                  <span>Ödeme Durumu</span>
+                  <strong>Demo / Pasif</strong>
+                </div>
+
+                <button className="primary" disabled>
+                  Plan Yükseltme Yakında
+                </button>
+              </div>
             </section>
           </>
         )}
