@@ -31,7 +31,6 @@ function App() {
     stock: "",
     productionTime: "",
     description: "",
-    image: "",
   };
 
   const emptyCostForm = {
@@ -195,7 +194,6 @@ function App() {
       stock: Number(form.stock),
       production_time: form.productionTime,
       description: form.description,
-      image: form.image,
     };
 
     const { error } = await supabase.from("products").insert([newProduct]);
@@ -225,7 +223,6 @@ function App() {
       stock: Number(form.stock),
       production_time: form.productionTime,
       description: form.description,
-      image: form.image,
     };
 
     const { error } = await supabase
@@ -517,8 +514,8 @@ function App() {
               <div>
                 <h2>Ürünler</h2>
                 <p>
-                  3D ürünleri ekleyin, görsel seçin ve stokları yönetin.
-                  Seçili kategori: <strong>{selectedCategory}</strong>
+                  3D ürünleri ekleyin ve stokları yönetin. Seçili kategori:{" "}
+                  <strong>{selectedCategory}</strong>
                 </p>
               </div>
             </header>
@@ -591,30 +588,6 @@ function App() {
                   }
                 />
 
-                <label className="file-label">
-                  Görsel Seç
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => {
-                      const file = e.target.files[0];
-
-                      if (!file) return;
-
-                      const reader = new FileReader();
-
-                      reader.onload = () =>
-                        setForm({ ...form, image: reader.result });
-
-                      reader.readAsDataURL(file);
-                    }}
-                  />
-                </label>
-
-                {form.image && (
-                  <img className="preview" src={form.image} alt="Ürün" />
-                )}
-
                 <button
                   className="primary"
                   onClick={editingProductId ? updateProduct : addProduct}
@@ -623,7 +596,10 @@ function App() {
                 </button>
 
                 {editingProductId && (
-                  <button className="secondary-button" onClick={resetProductForm}>
+                  <button
+                    className="secondary-button"
+                    onClick={resetProductForm}
+                  >
                     Düzenlemeyi İptal Et
                   </button>
                 )}
@@ -634,17 +610,13 @@ function App() {
 
                 <div className="product-list">
                   {filteredProducts.length === 0 && (
-                    <p className="empty">Bu kategoride veya aramada ürün yok.</p>
+                    <p className="empty">
+                      Bu kategoride veya aramada ürün yok.
+                    </p>
                   )}
 
                   {filteredProducts.map((product) => (
                     <div className="product-card" key={product.id}>
-                      {product.image ? (
-                        <img src={product.image} alt={product.name} />
-                      ) : (
-                        <div className="no-image">Görsel Yok</div>
-                      )}
-
                       <div className="product-info">
                         <h4>{product.name}</h4>
 
@@ -712,7 +684,6 @@ function App() {
                                 stock: product.stock || "",
                                 productionTime: product.production_time || "",
                                 description: product.description || "",
-                                image: product.image || "",
                               });
 
                               window.scrollTo({
