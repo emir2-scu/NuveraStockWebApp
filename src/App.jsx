@@ -6,6 +6,7 @@ function App() {
   const [page, setPage] = useState("dashboard");
   const [products, setProducts] = useState([]);
   const [costs, setCosts] = useState([]);
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
@@ -18,6 +19,7 @@ function App() {
   const [session, setSession] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [showLogin, setShowLogin] = useState(false);
+  const [authMode, setAuthMode] = useState("login");
 
   const [authForm, setAuthForm] = useState({
     email: "",
@@ -68,11 +70,40 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (session) {
+    if (session?.user) {
+      fetchProfile();
       fetchProducts();
       fetchCosts();
     }
   }, [session]);
+
+  const fetchProfile = async () => {
+    if (!session?.user) return;
+
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", session.user.id)
+      .single();
+
+    if (error) {
+      const { data: createdProfile } = await supabase
+        .from("profiles")
+        .insert([
+          {
+            id: session.user.id,
+            email: session.user.email,
+            plan: "free",
+          },
+        ])
+        .select()
+        .single();
+
+      setProfile(createdProfile);
+    } else {
+      setProfile(data);
+    }
+  };
 
   const signIn = async () => {
     if (!authForm.email || !authForm.password) {
@@ -90,20 +121,52 @@ function App() {
     }
   };
 
+  const signUp = async () => {
+    if (!authForm.email || !authForm.password) {
+      alert("Mail ve şifre boş bırakılamaz.");
+      return;
+    }
+
+    if (authForm.password.length < 6) {
+      alert("Şifre en az 6 karakter olmalı.");
+      return;
+    }
+
+    const { error } = await supabase.auth.signUp({
+      email: authForm.email,
+      password: authForm.password,
+    });
+
+    if (error) {
+      alert("Kayıt oluşturulamadı: " + error.message);
+      return;
+    }
+
+    alert(
+      "Kayıt oluşturuldu. Eğer mail doğrulama açıksa mailini kontrol et. Sonra giriş yapabilirsin."
+    );
+
+    setAuthMode("login");
+  };
+
   const signOut = async () => {
     await supabase.auth.signOut();
     setProducts([]);
     setCosts([]);
+    setProfile(null);
     setPage("dashboard");
     setShowLogin(false);
   };
 
   const fetchProducts = async () => {
+    if (!session?.user) return;
+
     setLoading(true);
 
     const { data, error } = await supabase
       .from("products")
       .select("*")
+      .eq("user_id", session.user.id)
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -116,9 +179,12 @@ function App() {
   };
 
   const fetchCosts = async () => {
+    if (!session?.user) return;
+
     const { data, error } = await supabase
       .from("costs")
       .select("*")
+      .eq("user_id", session.user.id)
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -182,6 +248,8 @@ function App() {
   };
 
   const addProduct = async () => {
+    if (!session?.user) return;
+
     if (!form.name || !form.stock) {
       alert("Ürün adı ve stok adedi boş bırakılamaz.");
       return;
@@ -189,6 +257,7 @@ function App() {
 
     const newProduct = {
       id: Date.now(),
+      user_id: session.user.id,
       name: form.name,
       category: form.category,
       material: form.material,
@@ -304,6 +373,8 @@ function App() {
   };
 
   const saveCost = async () => {
+    if (!session?.user) return;
+
     if (!costForm.productId) {
       alert("Lütfen ürün seçiniz.");
       return;
@@ -317,6 +388,7 @@ function App() {
 
     const newCost = {
       id: Date.now(),
+      user_id: session.user.id,
       product_id: Number(costForm.productId),
       product_name: selectedProduct?.name || "",
       filament: Number(costForm.filament || 0),
@@ -751,45 +823,45 @@ function App() {
           <div className="hero-dashboard">
             <div className="dashboard-top">
               <div>
-                <span>Canlı Önizleme</span>
+                <span>Örnek Önizleme</span>
                 <h3>Stok Paneli</h3>
               </div>
-              <strong>Aktif</strong>
+              <strong>Demo</strong>
             </div>
 
             <div className="dashboard-grid">
               <div>
-                <span>Toplam Ürün</span>
-                <strong>128</strong>
+                <span>Ürün Yönetimi</span>
+                <strong>Kolay</strong>
               </div>
               <div>
-                <span>Toplam Stok</span>
-                <strong>642</strong>
+                <span>Stok Takibi</span>
+                <strong>Senkron</strong>
               </div>
               <div>
-                <span>Düşük Stok</span>
-                <strong>7</strong>
+                <span>Maliyet</span>
+                <strong>Hesapla</strong>
               </div>
               <div>
-                <span>Tahmini Kâr</span>
-                <strong>₺18.450</strong>
+                <span>Raporlama</span>
+                <strong>Hazır</strong>
               </div>
             </div>
 
             <div className="dashboard-product">
               <div>
-                <h4>Ay Lamba</h4>
+                <h4>Demo Ürün</h4>
                 <p>PLA • Beyaz • Aydınlatma</p>
               </div>
-              <span>Stok: 24</span>
+              <span>Stok Takibi</span>
             </div>
 
             <div className="dashboard-product">
               <div>
-                <h4>Poseidon Figür</h4>
-                <p>Reçine • Gri • Dekoratif</p>
+                <h4>Demo Maliyet</h4>
+                <p>Filament • İşçilik • Kâr Oranı</p>
               </div>
-              <span>Stok: 8</span>
+              <span>Hesaplama</span>
             </div>
           </div>
         </section>
@@ -864,8 +936,13 @@ function App() {
             <span>TAKİP SİSTEMİ</span>
           </div>
 
-          <h2>Giriş Yap</h2>
-          <p>Stok sistemine erişmek için mail ve şifrenizi girin.</p>
+          <h2>{authMode === "login" ? "Giriş Yap" : "Kayıt Ol"}</h2>
+
+          <p>
+            {authMode === "login"
+              ? "Stok sistemine erişmek için mail ve şifrenizi girin."
+              : "7 gün ücretsiz deneme için hesap oluşturun."}
+          </p>
 
           <button
             className="back-to-landing"
@@ -891,12 +968,28 @@ function App() {
               setAuthForm({ ...authForm, password: e.target.value })
             }
             onKeyDown={(e) => {
-              if (e.key === "Enter") signIn();
+              if (e.key === "Enter") {
+                authMode === "login" ? signIn() : signUp();
+              }
             }}
           />
 
-          <button className="primary" onClick={signIn}>
-            Giriş Yap
+          <button
+            className="primary"
+            onClick={authMode === "login" ? signIn : signUp}
+          >
+            {authMode === "login" ? "Giriş Yap" : "Kayıt Ol"}
+          </button>
+
+          <button
+            className="secondary-button"
+            onClick={() =>
+              setAuthMode(authMode === "login" ? "signup" : "login")
+            }
+          >
+            {authMode === "login"
+              ? "Hesabın yok mu? Kayıt Ol"
+              : "Zaten hesabın var mı? Giriş Yap"}
           </button>
         </div>
       </div>
@@ -986,6 +1079,10 @@ function App() {
         <p className="side-note">
           {session.user.email}
           <br />
+          Plan: {profile?.plan || "free"}
+          <br />
+          7 gün ücretsiz deneme aktif
+          <br />
           <br />
           Supabase senkron aktif
         </p>
@@ -1035,6 +1132,27 @@ function App() {
                 <div>
                   <span>Tahmini Kâr</span>
                   <strong>{(totalSale - totalCost).toFixed(2)} TL</strong>
+                </div>
+              </div>
+            </section>
+
+            <section className="panel">
+              <h3>Abonelik Durumu</h3>
+
+              <div className="finance-row">
+                <div>
+                  <span>Plan</span>
+                  <strong>{profile?.plan || "free"}</strong>
+                </div>
+
+                <div>
+                  <span>Deneme</span>
+                  <strong>7 Gün</strong>
+                </div>
+
+                <div>
+                  <span>Durum</span>
+                  <strong>Aktif</strong>
                 </div>
               </div>
             </section>
