@@ -95,6 +95,7 @@ function App() {
     setProducts([]);
     setCosts([]);
     setPage("dashboard");
+    setShowLogin(false);
   };
 
   const fetchProducts = async () => {
@@ -344,100 +345,182 @@ function App() {
   if (authLoading) {
     return <div className="auth-screen">Yükleniyor...</div>;
   }
-if (!session && !showLogin) {
-  return (
-    <div className="landing-page">
-      <header className="landing-header">
-        <div className="landing-logo">
-          <h1>3D STOK TAKİP</h1>
-          <span>Nuvera Web System</span>
-        </div>
 
-        <button onClick={() => setShowLogin(true)}>Giriş Yap</button>
-      </header>
-
-      <section className="hero-section">
-        <div className="hero-text">
-          <span className="hero-badge">3D Ürün Yönetim Sistemi</span>
-
-          <h2>3D baskı ürünlerinizi tek panelden yönetin.</h2>
-
-          <p>
-            Ürünlerinizi listeleyin, stoklarınızı takip edin, maliyetlerinizi
-            hesaplayın ve satış fiyatlarınızı kolayca yönetin.
-          </p>
-
-          <div className="hero-buttons">
-            <button onClick={() => setShowLogin(true)}>Sisteme Giriş Yap</button>
-            <a href="#features">Özellikleri Gör</a>
-          </div>
-        </div>
-
-        <div className="hero-card">
-          <div className="hero-card-top">
-            <span>Canlı Panel</span>
-            <strong>Online</strong>
+  if (!session && !showLogin) {
+    return (
+      <div className="landing-page">
+        <header className="landing-header">
+          <div className="landing-logo">
+            <h1>3D STOK TAKİP</h1>
+            <span>Akıllı stok ve maliyet yönetimi</span>
           </div>
 
-          <div className="hero-stat">
-            <span>Ürün Takibi</span>
-            <strong>Kolay</strong>
+          <nav className="landing-nav">
+            <a href="#features">Özellikler</a>
+            <a href="#workflow">Nasıl Çalışır?</a>
+            <button onClick={() => setShowLogin(true)}>Giriş Yap</button>
+          </nav>
+        </header>
+
+        <section className="hero-section">
+          <div className="hero-text">
+            <span className="hero-badge">
+              3D Ürünler İçin Web Tabanlı Takip Sistemi
+            </span>
+
+            <h2>Stok, maliyet ve satış fiyatı tek panelde.</h2>
+
+            <p>
+              3D baskı ürünlerinizi kategori, malzeme, renk ve stok
+              bilgileriyle yönetin. Maliyetleri hesaplayın, satış fiyatını
+              belirleyin ve tüm verilerinize telefon ya da bilgisayardan ulaşın.
+            </p>
+
+            <div className="hero-buttons">
+              <button onClick={() => setShowLogin(true)}>
+                Panele Giriş Yap
+              </button>
+              <a href="#features">Sistemi İncele</a>
+            </div>
+
+            <div className="hero-mini-stats">
+              <div>
+                <strong>Online</strong>
+                <span>Senkron veri</span>
+              </div>
+              <div>
+                <strong>Mobil</strong>
+                <span>Telefon uyumlu</span>
+              </div>
+              <div>
+                <strong>Hızlı</strong>
+                <span>Kolay stok işlemi</span>
+              </div>
+            </div>
           </div>
 
-          <div className="hero-stat">
-            <span>Stok Yönetimi</span>
-            <strong>Senkron</strong>
+          <div className="hero-dashboard">
+            <div className="dashboard-top">
+              <div>
+                <span>Canlı Önizleme</span>
+                <h3>Stok Paneli</h3>
+              </div>
+              <strong>Aktif</strong>
+            </div>
+
+            <div className="dashboard-grid">
+              <div>
+                <span>Toplam Ürün</span>
+                <strong>128</strong>
+              </div>
+              <div>
+                <span>Toplam Stok</span>
+                <strong>642</strong>
+              </div>
+              <div>
+                <span>Düşük Stok</span>
+                <strong>7</strong>
+              </div>
+              <div>
+                <span>Tahmini Kâr</span>
+                <strong>₺18.450</strong>
+              </div>
+            </div>
+
+            <div className="dashboard-product">
+              <div>
+                <h4>Ay Lamba</h4>
+                <p>PLA • Beyaz • Aydınlatma</p>
+              </div>
+              <span>Stok: 24</span>
+            </div>
+
+            <div className="dashboard-product">
+              <div>
+                <h4>Poseidon Figür</h4>
+                <p>Reçine • Gri • Dekoratif</p>
+              </div>
+              <span>Stok: 8</span>
+            </div>
+          </div>
+        </section>
+
+        <section className="features-section" id="features">
+          <div className="feature-card">
+            <div>📦</div>
+            <h3>Ürün Yönetimi</h3>
+            <p>
+              Ürün adı, kategori, malzeme, renk, açıklama ve stok bilgilerini
+              düzenli şekilde kaydedin.
+            </p>
           </div>
 
-          <div className="hero-stat">
-            <span>Maliyet Hesabı</span>
-            <strong>Otomatik</strong>
+          <div className="feature-card">
+            <div>📊</div>
+            <h3>Stok Takibi</h3>
+            <p>
+              Stok artırma, azaltma, düşük stok kontrolü ve ürün arama
+              işlemlerini hızlıca yapın.
+            </p>
           </div>
-        </div>
-      </section>
 
-      <section className="features-section" id="features">
-        <div className="feature-card">
-          <div>📦</div>
-          <h3>Ürün Yönetimi</h3>
-          <p>3D baskı ürünlerinizi kategori, malzeme ve renk bilgileriyle kaydedin.</p>
-        </div>
+          <div className="feature-card">
+            <div>💰</div>
+            <h3>Maliyet Hesabı</h3>
+            <p>
+              Filament, elektrik, işçilik, paketleme ve kâr oranına göre satış
+              fiyatı hesaplayın.
+            </p>
+          </div>
 
-        <div className="feature-card">
-          <div>📊</div>
-          <h3>Stok Takibi</h3>
-          <p>Ürün stoklarını artırın, azaltın ve düşük stokları kolayca takip edin.</p>
-        </div>
+          <div className="feature-card">
+            <div>☁️</div>
+            <h3>Cihazlar Arası Senkron</h3>
+            <p>
+              Telefon ve bilgisayardan aynı hesaba girerek kayıtlı verilere
+              ulaşın.
+            </p>
+          </div>
+        </section>
 
-        <div className="feature-card">
-          <div>💰</div>
-          <h3>Maliyet Hesabı</h3>
-          <p>Filament, elektrik, işçilik ve kâr oranına göre satış fiyatı hesaplayın.</p>
-        </div>
+        <section className="workflow-section" id="workflow">
+          <div>
+            <span>01</span>
+            <h3>Ürünleri Ekle</h3>
+            <p>3D ürünlerini kategori ve stok bilgileriyle sisteme kaydet.</p>
+          </div>
 
-        <div className="feature-card">
-          <div>☁️</div>
-          <h3>Online Senkron</h3>
-          <p>Telefon ve bilgisayardan aynı verilere ulaşın, kayıtlarınız kaybolmasın.</p>
-        </div>
-      </section>
-    </div>
-  );
-}
+          <div>
+            <span>02</span>
+            <h3>Stokları Yönet</h3>
+            <p>Gelen veya çıkan ürün miktarını hızlıca artır ya da azalt.</p>
+          </div>
+
+          <div>
+            <span>03</span>
+            <h3>Maliyeti Hesapla</h3>
+            <p>Ürün maliyetini ve tahmini satış fiyatını panelden takip et.</p>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
   if (!session) {
     return (
       <div className="auth-screen">
         <div className="auth-card">
           <div className="auth-brand">
-            <h1>NUVERA</h1>
-            <span>STOCK WEB</span>
+            <h1>3D STOK</h1>
+            <span>TAKİP SİSTEMİ</span>
           </div>
 
           <h2>Giriş Yap</h2>
           <p>Stok sistemine erişmek için mail ve şifrenizi girin.</p>
+
           <button className="back-to-landing" onClick={() => setShowLogin(false)}>
-  ← Tanıtım Sayfasına Dön
-</button>
+            ← Tanıtım Sayfasına Dön
+          </button>
 
           <input
             type="email"
@@ -512,8 +595,8 @@ if (!session && !showLogin) {
 
       <aside className="sidebar">
         <div className="brand">
-          <h1>NUVERA</h1>
-          <span>STOCK WEB</span>
+          <h1>3D STOK</h1>
+          <span>TAKİP SİSTEMİ</span>
         </div>
 
         <nav>
@@ -569,39 +652,40 @@ if (!session && !showLogin) {
                 {loading ? "Yükleniyor..." : "Online Senkron"}
               </span>
             </header>
-<section className="stats">
-  <div className="stat-card">
-    <div className="stat-icon">📦</div>
-    <div>
-      <span>Toplam Ürün</span>
-      <strong>{products.length}</strong>
-    </div>
-  </div>
 
-  <div className="stat-card green">
-    <div className="stat-icon">📊</div>
-    <div>
-      <span>Toplam Stok</span>
-      <strong>{totalStock}</strong>
-    </div>
-  </div>
+            <section className="stats">
+              <div className="stat-card">
+                <div className="stat-icon">📦</div>
+                <div>
+                  <span>Toplam Ürün</span>
+                  <strong>{products.length}</strong>
+                </div>
+              </div>
 
-  <div className="stat-card yellow">
-    <div className="stat-icon">⚠️</div>
-    <div>
-      <span>Düşük Stok</span>
-      <strong>{lowStock}</strong>
-    </div>
-  </div>
+              <div className="stat-card green">
+                <div className="stat-icon">📊</div>
+                <div>
+                  <span>Toplam Stok</span>
+                  <strong>{totalStock}</strong>
+                </div>
+              </div>
 
-  <div className="stat-card red">
-    <div className="stat-icon">💸</div>
-    <div>
-      <span>Tahmini Kâr</span>
-      <strong>{(totalSale - totalCost).toFixed(2)} TL</strong>
-    </div>
-  </div>
-</section>
+              <div className="stat-card yellow">
+                <div className="stat-icon">⚠️</div>
+                <div>
+                  <span>Düşük Stok</span>
+                  <strong>{lowStock}</strong>
+                </div>
+              </div>
+
+              <div className="stat-card red">
+                <div className="stat-icon">💸</div>
+                <div>
+                  <span>Tahmini Kâr</span>
+                  <strong>{(totalSale - totalCost).toFixed(2)} TL</strong>
+                </div>
+              </div>
+            </section>
 
             <section className="panel">
               <h3>Genel Finans Özeti</h3>
