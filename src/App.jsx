@@ -10,6 +10,7 @@ function App() {
 
   const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("Tüm Ürünler");
+  const [searchText, setSearchText] = useState("");
 
   const [editingProductId, setEditingProductId] = useState(null);
   const [stockAmount, setStockAmount] = useState({});
@@ -143,14 +144,24 @@ function App() {
     ),
   ];
 
-  const filteredProducts =
-    selectedCategory === "Tüm Ürünler"
-      ? products
-      : products.filter((p) => {
-          const category = (p.category || "").trim();
-          const cleanCategory = category === "" ? "Kategorisiz" : category;
-          return cleanCategory === selectedCategory;
-        });
+const filteredProducts = products.filter((p) => {
+  const category = (p.category || "").trim();
+  const cleanCategory = category === "" ? "Kategorisiz" : category;
+
+  const categoryMatch =
+    selectedCategory === "Tüm Ürünler" || cleanCategory === selectedCategory;
+
+  const search = searchText.toLowerCase();
+
+  const searchMatch =
+    (p.name || "").toLowerCase().includes(search) ||
+    (p.category || "").toLowerCase().includes(search) ||
+    (p.material || "").toLowerCase().includes(search) ||
+    (p.color || "").toLowerCase().includes(search) ||
+    (p.description || "").toLowerCase().includes(search);
+
+  return categoryMatch && searchMatch;
+});
 
   const getCategoryCount = (categoryName) => {
     if (categoryName === "Tüm Ürünler") {
@@ -450,6 +461,33 @@ function App() {
                 <h2>Ana Panel</h2>
                 <p>Ürün, stok, maliyet ve satış durumunu buradan takip edin.</p>
               </div>
+              <div className="search-box">
+  <input
+    type="text"
+    placeholder="Ürün adı, kategori, malzeme veya renk ara..."
+    value={searchText}
+    onChange={(e) => setSearchText(e.target.value)}
+  />
+<div className="search-box">
+  <input
+    type="text"
+    placeholder="Ürün adı, kategori, malzeme, renk veya açıklama ara..."
+    value={searchText}
+    onChange={(e) => setSearchText(e.target.value)}
+  />
+
+  {searchText && (
+    <button onClick={() => setSearchText("")}>
+      Temizle
+    </button>
+  )}
+</div>
+  {searchText && (
+    <button onClick={() => setSearchText("")}>
+      Temizle
+    </button>
+  )}
+</div>
 
               <span className="badge">
                 {loading ? "Yükleniyor..." : "Online Senkron"}
