@@ -432,6 +432,8 @@ function App() {
   const landingCss = `
     .landing-page {
       min-height: 100vh;
+      width: 100vw;
+box-sizing: border-box;
       background:
         radial-gradient(circle at top right, rgba(0, 173, 181, 0.3), transparent 34%),
         linear-gradient(135deg, #111827, #0f172a);
