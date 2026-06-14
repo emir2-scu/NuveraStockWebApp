@@ -602,13 +602,165 @@ function App() {
       justify-content: center;
     }
 
-    .hero-visual-card img {
+    .mock-dashboard {
       width: 100%;
-      height: 100%;
-      min-height: 400px;
-      object-fit: cover;
-      border-radius: 26px;
+      min-height: 420px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, #ffffff, #f0fdfa);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.8);
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      overflow: hidden;
+    }
+
+    .mock-sidebar {
+      background: linear-gradient(180deg, #0f766e, #0891b2);
+      padding: 26px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .mock-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: white;
+      color: #0891b2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+    }
+
+    .mock-sidebar span {
+      width: 36px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.45);
+    }
+
+    .mock-content {
+      padding: 28px;
+    }
+
+    .mock-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+
+    .mock-top small {
+      color: #64748b;
+      font-weight: 900;
+    }
+
+    .mock-top h3 {
+      margin: 5px 0 0;
+      font-size: 30px;
+      color: #0f172a;
+    }
+
+    .mock-user {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #06b6d4, #14b8a6);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+    }
+
+    .mock-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .mock-stats div,
+    .mock-chart,
+    .mock-products {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.06);
+    }
+
+    .mock-stats span {
       display: block;
+      color: #64748b;
+      font-weight: 800;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .mock-stats strong {
+      color: #0f172a;
+      font-size: 24px;
+    }
+
+    .mock-bottom {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 14px;
+    }
+
+    .mock-chart {
+      height: 150px;
+      display: flex;
+      gap: 12px;
+      align-items: end;
+    }
+
+    .mock-chart span {
+      flex: 1;
+      border-radius: 999px 999px 8px 8px;
+      background: linear-gradient(180deg, #22d3ee, #14b8a6);
+    }
+
+    .mock-chart span:nth-child(1) { height: 45%; }
+    .mock-chart span:nth-child(2) { height: 65%; }
+    .mock-chart span:nth-child(3) { height: 52%; }
+    .mock-chart span:nth-child(4) { height: 78%; }
+    .mock-chart span:nth-child(5) { height: 92%; }
+
+    .mock-products {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .mock-products div {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .mock-products strong {
+      color: #0f172a;
+      font-size: 13px;
+    }
+
+    .mock-products span {
+      background: #dcfce7;
+      color: #15803d;
+      padding: 5px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .mock-products .danger-mini {
+      background: #fee2e2;
+      color: #dc2626;
     }
 
     .hero-floating-card {
@@ -830,14 +982,6 @@ function App() {
       .pricing-card.featured {
         transform: none;
       }
-
-      .hero-visual-card {
-        min-height: auto;
-      }
-
-      .hero-visual-card img {
-        min-height: 320px;
-      }
     }
 
     @media (max-width: 560px) {
@@ -877,18 +1021,23 @@ function App() {
 
       .hero-visual-card {
         padding: 10px;
-        flex-direction: column;
       }
 
-      .hero-visual-card img {
-        min-height: 260px;
+      .mock-dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      .mock-sidebar {
+        display: none;
+      }
+
+      .mock-stats,
+      .mock-bottom {
+        grid-template-columns: 1fr;
       }
 
       .hero-floating-card {
-        position: static;
-        margin-top: 10px;
-        width: 100%;
-        box-sizing: border-box;
+        display: none;
       }
     }
   `;
@@ -953,10 +1102,65 @@ function App() {
           </div>
 
           <div className="hero-visual-card">
-            <img
-              src="/hero-3d-stock.svg"
-              alt="3D stok takip ve maliyet yönetim paneli"
-            />
+            <div className="mock-dashboard">
+              <div className="mock-sidebar">
+                <div className="mock-logo">▣</div>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+
+              <div className="mock-content">
+                <div className="mock-top">
+                  <div>
+                    <small>Genel Bakış</small>
+                    <h3>Stok Paneli</h3>
+                  </div>
+                  <div className="mock-user">3D</div>
+                </div>
+
+                <div className="mock-stats">
+                  <div>
+                    <span>Toplam Ürün</span>
+                    <strong>248</strong>
+                  </div>
+                  <div>
+                    <span>Toplam Stok</span>
+                    <strong>1.286</strong>
+                  </div>
+                  <div>
+                    <span>Maliyet</span>
+                    <strong>₺58,40</strong>
+                  </div>
+                </div>
+
+                <div className="mock-bottom">
+                  <div className="mock-chart">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+
+                  <div className="mock-products">
+                    <div>
+                      <strong>PLA • Beyaz</strong>
+                      <span>Yeterli</span>
+                    </div>
+                    <div>
+                      <strong>ABS • Gri</strong>
+                      <span className="danger-mini">Azaldı</span>
+                    </div>
+                    <div>
+                      <strong>PETG • Siyah</strong>
+                      <span>Kritik</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <div className="hero-floating-card card-one">
               <strong>+248</strong>
