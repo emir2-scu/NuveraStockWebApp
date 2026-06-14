@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nuvera-stock-web-app.vercel.app/sitemap.xml

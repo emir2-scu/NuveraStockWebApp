@@ -87,20 +87,26 @@ function App() {
       .single();
 
     if (error) {
-      const { data: createdProfile } = await supabase
+      const isMainAdmin = session.user.email === "emir93716@gmail.com";
+
+      const { data: createdProfile, error: createError } = await supabase
         .from("profiles")
         .insert([
           {
             id: session.user.id,
             email: session.user.email,
-            plan: session.user.email === "emir93716@gmail.com" ? "admin" : "free",
-            is_admin: session.user.email === "emir93716@gmail.com",
+            plan: isMainAdmin ? "admin" : "free",
+            is_admin: isMainAdmin,
           },
         ])
         .select()
         .single();
 
-      setProfile(createdProfile);
+      if (createError) {
+        console.log(createError);
+      } else {
+        setProfile(createdProfile);
+      }
     } else {
       setProfile(data);
     }
@@ -431,9 +437,9 @@ function App() {
 
   const landingCss = `
     .landing-page {
-      min-height: 100vh;
       width: 100vw;
-box-sizing: border-box;
+      min-height: 100vh;
+      box-sizing: border-box;
       background:
         radial-gradient(circle at top right, rgba(0, 173, 181, 0.3), transparent 34%),
         linear-gradient(135deg, #111827, #0f172a);
@@ -702,13 +708,15 @@ box-sizing: border-box;
       margin-bottom: 14px;
     }
 
-    .feature-card h3 {
-      margin: 0 0 10px;
-      font-size: 20px;
+    .feature-card h3,
+    .workflow-section h3,
+    .faq-card h3 {
       color: white;
     }
 
-    .feature-card p {
+    .feature-card p,
+    .workflow-section p,
+    .faq-card p {
       margin: 0;
       color: #cbd5e1;
       line-height: 1.6;
@@ -726,18 +734,6 @@ box-sizing: border-box;
       color: #67e8f9;
       font-weight: 900;
       letter-spacing: 2px;
-    }
-
-    .workflow-section h3 {
-      margin: 12px 0 8px;
-      font-size: 22px;
-      color: white;
-    }
-
-    .workflow-section p {
-      margin: 0;
-      color: #cbd5e1;
-      line-height: 1.6;
     }
 
     .pricing-section {
@@ -827,17 +823,6 @@ box-sizing: border-box;
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 18px;
-    }
-
-    .faq-card h3 {
-      margin: 0 0 10px;
-      color: white;
-    }
-
-    .faq-card p {
-      margin: 0;
-      color: #cbd5e1;
-      line-height: 1.6;
     }
 
     @media (max-width: 900px) {
@@ -1027,37 +1012,25 @@ box-sizing: border-box;
           <div className="feature-card">
             <div>📦</div>
             <h3>Ürün Yönetimi</h3>
-            <p>
-              Ürün adı, kategori, malzeme, renk, açıklama ve stok bilgilerini
-              düzenli şekilde kaydedin.
-            </p>
+            <p>Ürün adı, kategori, malzeme, renk ve stok bilgilerini kaydedin.</p>
           </div>
 
           <div className="feature-card">
             <div>📊</div>
             <h3>Stok Takibi</h3>
-            <p>
-              Stok artırma, azaltma, düşük stok kontrolü ve ürün arama
-              işlemlerini hızlıca yapın.
-            </p>
+            <p>Stok artırma, azaltma ve düşük stok kontrolünü hızlıca yapın.</p>
           </div>
 
           <div className="feature-card">
             <div>💰</div>
             <h3>Maliyet Hesabı</h3>
-            <p>
-              Filament, elektrik, işçilik, paketleme ve kâr oranına göre satış
-              fiyatı hesaplayın.
-            </p>
+            <p>Filament, elektrik, işçilik ve kâr oranına göre fiyat hesaplayın.</p>
           </div>
 
           <div className="feature-card">
             <div>☁️</div>
-            <h3>Cihazlar Arası Senkron</h3>
-            <p>
-              Telefon ve bilgisayardan aynı hesaba girerek kayıtlı verilere
-              ulaşın.
-            </p>
+            <h3>Senkron Kullanım</h3>
+            <p>Telefon ve bilgisayardan aynı hesaba giriş yaparak kullanın.</p>
           </div>
         </section>
 
@@ -1148,34 +1121,22 @@ box-sizing: border-box;
         <section className="faq-section">
           <div className="faq-card">
             <h3>Verilerim başkasına görünür mü?</h3>
-            <p>
-              Hayır. Her kullanıcı kendi hesabına bağlı ürün ve maliyet
-              kayıtlarını görür.
-            </p>
+            <p>Hayır. Her kullanıcı sadece kendi kayıtlarını görür.</p>
           </div>
 
           <div className="faq-card">
             <h3>Telefondan kullanabilir miyim?</h3>
-            <p>
-              Evet. Web tabanlı olduğu için telefon ve bilgisayardan aynı
-              hesaba giriş yapılabilir.
-            </p>
+            <p>Evet. Web tabanlı olduğu için telefondan kullanılabilir.</p>
           </div>
 
           <div className="faq-card">
             <h3>Free planda sınır var mı?</h3>
-            <p>
-              Evet. Free Plan’da 20 ürün sınırı vardır. Pro Plan’da ürün sınırı
-              kaldırılır.
-            </p>
+            <p>Free Plan’da 20 ürün sınırı vardır.</p>
           </div>
 
           <div className="faq-card">
             <h3>Ödeme sistemi aktif mi?</h3>
-            <p>
-              Şu an demo durumundadır. iyzico veya PayTR gibi ödeme altyapısı
-              bağlanarak gerçek abonelik sistemi kurulabilir.
-            </p>
+            <p>Şu an demo durumundadır. Sonradan iyzico veya PayTR bağlanabilir.</p>
           </div>
         </section>
       </div>
@@ -1833,10 +1794,15 @@ box-sizing: border-box;
                   <span>Veri Senkronizasyonu</span>
                   <strong>Supabase Aktif</strong>
                 </div>
+
+                <div className="settings-row">
+                  <span>Yetki</span>
+                  <strong>{isAdmin ? "Yönetici" : "Kullanıcı"}</strong>
+                </div>
               </div>
 
               <div className="panel settings-card premium-card">
-                <h3>Abonelik Planı</h3>
+                <h3>Mevcut Plan</h3>
 
                 <div className="plan-badge">
                   {isAdmin
@@ -1872,8 +1838,81 @@ box-sizing: border-box;
                 </div>
 
                 <button className="primary" disabled>
-                  {isAdmin ? "Admin Yetkisi Aktif" : "Plan Yükseltme Yakında"}
+                  {isAdmin ? "Admin Yetkisi Aktif" : "Ödeme Altyapısı Yakında"}
                 </button>
+              </div>
+            </section>
+
+            <section className="panel plans-panel">
+              <div className="plans-header">
+                <div>
+                  <h3>Plan Seçenekleri</h3>
+                  <p>
+                    Uygulama gerçek abonelik sistemine bağlandığında bu planlar
+                    aktif kullanılabilir.
+                  </p>
+                </div>
+              </div>
+
+              <div className="app-pricing-grid">
+                <div className="app-plan-card">
+                  <span className="app-plan-label">Başlangıç</span>
+                  <h4>Free Plan</h4>
+                  <div className="app-plan-price">
+                    0 TL <small>/ ay</small>
+                  </div>
+
+                  <ul>
+                    <li>20 ürün limiti</li>
+                    <li>Temel stok takibi</li>
+                    <li>Temel maliyet hesabı</li>
+                    <li>Mobil ve bilgisayar erişimi</li>
+                  </ul>
+
+                  <button disabled>
+                    {profile?.plan === "free" && !isAdmin
+                      ? "Mevcut Plan"
+                      : "Free Plan"}
+                  </button>
+                </div>
+
+                <div className="app-plan-card highlighted-plan">
+                  <span className="app-plan-label">En Popüler</span>
+                  <h4>Pro Plan</h4>
+                  <div className="app-plan-price">
+                    149 TL <small>/ ay</small>
+                  </div>
+
+                  <ul>
+                    <li>Sınırsız ürün</li>
+                    <li>Gelişmiş stok takibi</li>
+                    <li>Kategori yönetimi</li>
+                    <li>Gelişmiş raporlar</li>
+                  </ul>
+
+                  <button disabled>
+                    {isAdmin ? "Admin İçin Açık" : "Pro’ya Geç Yakında"}
+                  </button>
+                </div>
+
+                <div className="app-plan-card">
+                  <span className="app-plan-label">Kurumsal</span>
+                  <h4>Business Plan</h4>
+                  <div className="app-plan-price">
+                    299 TL <small>/ ay</small>
+                  </div>
+
+                  <ul>
+                    <li>Firma hesabı</li>
+                    <li>Çoklu kullanıcı desteği</li>
+                    <li>Gelişmiş finans takibi</li>
+                    <li>Kurumsal destek</li>
+                  </ul>
+
+                  <button disabled>
+                    {isAdmin ? "Admin İçin Açık" : "İletişime Geç Yakında"}
+                  </button>
+                </div>
               </div>
             </section>
           </>
