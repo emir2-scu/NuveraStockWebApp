@@ -93,7 +93,8 @@ function App() {
           {
             id: session.user.id,
             email: session.user.email,
-            plan: "free",
+            plan: session.user.email === "emir93716@gmail.com" ? "admin" : "free",
+            is_admin: session.user.email === "emir93716@gmail.com",
           },
         ])
         .select()
@@ -142,10 +143,7 @@ function App() {
       return;
     }
 
-    alert(
-      "Kayıt oluşturuldu. Eğer mail doğrulama açıksa mailini kontrol et. Sonra giriş yapabilirsin."
-    );
-
+    alert("Kayıt oluşturuldu. Şimdi aynı mail ve şifreyle giriş yapabilirsin.");
     setAuthMode("login");
   };
 
@@ -199,6 +197,16 @@ function App() {
   const totalCost = costs.reduce((sum, c) => sum + Number(c.total_cost || 0), 0);
   const totalSale = costs.reduce((sum, c) => sum + Number(c.sale_price || 0), 0);
 
+  const isAdmin =
+    profile?.is_admin === true ||
+    profile?.plan === "admin" ||
+    session?.user?.email === "emir93716@gmail.com";
+
+  const isPro = profile?.plan === "pro" || profile?.plan === "business";
+  const freeProductLimit = 20;
+  const canAddMoreProducts =
+    isAdmin || isPro || products.length < freeProductLimit;
+
   const categories = [
     "Tüm Ürünler",
     ...Array.from(
@@ -249,6 +257,13 @@ function App() {
 
   const addProduct = async () => {
     if (!session?.user) return;
+
+    if (!canAddMoreProducts) {
+      alert(
+        "Free Plan'da en fazla 20 ürün ekleyebilirsiniz. Daha fazla ürün için Pro plana geçmeniz gerekir."
+      );
+      return;
+    }
 
     if (!form.name || !form.stock) {
       alert("Ürün adı ve stok adedi boş bırakılamaz.");
@@ -453,6 +468,7 @@ function App() {
       display: flex;
       align-items: center;
       gap: 18px;
+      flex-wrap: wrap;
     }
 
     .landing-nav a {
@@ -538,7 +554,9 @@ function App() {
     .dashboard-grid div,
     .dashboard-product,
     .feature-card,
-    .workflow-section div {
+    .workflow-section div,
+    .pricing-card,
+    .faq-card {
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.13);
       border-radius: 22px;
@@ -644,9 +662,34 @@ function App() {
       color: white;
     }
 
+    .landing-section-title {
+      max-width: 1180px;
+      margin: 0 auto 24px;
+      text-align: center;
+    }
+
+    .landing-section-title span {
+      color: #67e8f9;
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+
+    .landing-section-title h2 {
+      margin: 12px 0;
+      font-size: 38px;
+      color: white;
+    }
+
+    .landing-section-title p {
+      margin: 0 auto;
+      max-width: 680px;
+      color: #cbd5e1;
+      line-height: 1.7;
+    }
+
     .features-section {
       max-width: 1180px;
-      margin: 0 auto 50px;
+      margin: 0 auto 70px;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 18px;
@@ -671,7 +714,7 @@ function App() {
 
     .workflow-section {
       max-width: 1180px;
-      margin: 28px auto 70px;
+      margin: 28px auto 80px;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 18px;
@@ -695,6 +738,106 @@ function App() {
       line-height: 1.6;
     }
 
+    .pricing-section {
+      max-width: 1180px;
+      margin: 0 auto 80px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .pricing-card {
+      position: relative;
+      padding: 26px;
+    }
+
+    .pricing-card.featured {
+      border-color: rgba(0, 173, 181, 0.65);
+      background:
+        radial-gradient(circle at top right, rgba(0, 173, 181, 0.22), transparent 35%),
+        rgba(255, 255, 255, 0.1);
+      transform: translateY(-10px);
+    }
+
+    .pricing-label {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: linear-gradient(135deg, #00adb5, #14b8a6);
+      color: white;
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .pricing-card h3 {
+      margin: 0 0 12px;
+      color: white;
+      font-size: 24px;
+    }
+
+    .pricing-price {
+      font-size: 38px;
+      font-weight: 900;
+      color: white;
+      margin-bottom: 16px;
+    }
+
+    .pricing-price span {
+      color: #cbd5e1;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .pricing-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 22px;
+    }
+
+    .pricing-card li {
+      color: #cbd5e1;
+      margin-bottom: 11px;
+      line-height: 1.5;
+    }
+
+    .pricing-card button {
+      width: 100%;
+      border: 0;
+      border-radius: 16px;
+      padding: 14px;
+      font-weight: 900;
+      cursor: pointer;
+      color: white;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .pricing-card.featured button {
+      background: linear-gradient(135deg, #00adb5, #14b8a6);
+      border: 0;
+    }
+
+    .faq-section {
+      max-width: 1180px;
+      margin: 0 auto 80px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .faq-card h3 {
+      margin: 0 0 10px;
+      color: white;
+    }
+
+    .faq-card p {
+      margin: 0;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+
     @media (max-width: 900px) {
       .hero-section {
         grid-template-columns: 1fr;
@@ -705,18 +848,18 @@ function App() {
         font-size: 42px;
       }
 
-      .features-section {
+      .features-section,
+      .pricing-section {
         grid-template-columns: repeat(2, 1fr);
       }
 
-      .workflow-section {
+      .workflow-section,
+      .faq-section {
         grid-template-columns: 1fr;
       }
 
-      .landing-nav {
-        width: 100%;
-        justify-content: space-between;
-        flex-wrap: wrap;
+      .pricing-card.featured {
+        transform: none;
       }
     }
 
@@ -735,7 +878,8 @@ function App() {
         font-size: 36px;
       }
 
-      .features-section {
+      .features-section,
+      .pricing-section {
         grid-template-columns: 1fr;
       }
 
@@ -781,6 +925,8 @@ function App() {
           <nav className="landing-nav">
             <a href="#features">Özellikler</a>
             <a href="#workflow">Nasıl Çalışır?</a>
+            <a href="#pricing">Fiyatlandırma</a>
+            <a href="#faq">SSS</a>
             <button onClick={() => setShowLogin(true)}>Giriş Yap</button>
           </nav>
         </header>
@@ -800,8 +946,8 @@ function App() {
             </p>
 
             <div className="hero-buttons">
-              <button onClick={() => setShowLogin(true)}>Panele Giriş Yap</button>
-              <a href="#features">Sistemi İncele</a>
+              <button onClick={() => setShowLogin(true)}>Ücretsiz Başla</button>
+              <a href="#pricing">Planları İncele</a>
             </div>
 
             <div className="hero-mini-stats">
@@ -814,8 +960,8 @@ function App() {
                 <span>Telefon uyumlu</span>
               </div>
               <div>
-                <strong>Hızlı</strong>
-                <span>Kolay stok işlemi</span>
+                <strong>Güvenli</strong>
+                <span>Kullanıcıya özel veri</span>
               </div>
             </div>
           </div>
@@ -843,8 +989,8 @@ function App() {
                 <strong>Hesapla</strong>
               </div>
               <div>
-                <span>Raporlama</span>
-                <strong>Hazır</strong>
+                <span>Plan</span>
+                <strong>Pro</strong>
               </div>
             </div>
 
@@ -866,7 +1012,16 @@ function App() {
           </div>
         </section>
 
-        <section className="features-section" id="features">
+        <div className="landing-section-title" id="features">
+          <span>ÖZELLİKLER</span>
+          <h2>3D üreticiler için pratik yönetim paneli</h2>
+          <p>
+            Ürün, stok, maliyet ve satış fiyatı süreçlerini tek ekranda
+            toplayarak daha düzenli bir iş akışı kurmanı sağlar.
+          </p>
+        </div>
+
+        <section className="features-section">
           <div className="feature-card">
             <div>📦</div>
             <h3>Ürün Yönetimi</h3>
@@ -904,7 +1059,12 @@ function App() {
           </div>
         </section>
 
-        <section className="workflow-section" id="workflow">
+        <div className="landing-section-title" id="workflow">
+          <span>İŞ AKIŞI</span>
+          <h2>Üç adımda stok kontrolü</h2>
+        </div>
+
+        <section className="workflow-section">
           <div>
             <span>01</span>
             <h3>Ürünleri Ekle</h3>
@@ -921,6 +1081,99 @@ function App() {
             <span>03</span>
             <h3>Maliyeti Hesapla</h3>
             <p>Ürün maliyetini ve tahmini satış fiyatını panelden takip et.</p>
+          </div>
+        </section>
+
+        <div className="landing-section-title" id="pricing">
+          <span>FİYATLANDIRMA</span>
+          <h2>İhtiyacına göre plan seç</h2>
+          <p>
+            Şimdilik ödeme altyapısı demo durumundadır. Gerçek ödeme sistemi
+            bağlandığında plan yükseltme aktif edilebilir.
+          </p>
+        </div>
+
+        <section className="pricing-section">
+          <div className="pricing-card">
+            <h3>Free Plan</h3>
+            <div className="pricing-price">
+              0 TL <span>/ ay</span>
+            </div>
+            <ul>
+              <li>✅ 20 ürün limiti</li>
+              <li>✅ Temel stok takibi</li>
+              <li>✅ Temel maliyet hesabı</li>
+              <li>✅ Mobil ve bilgisayar erişimi</li>
+            </ul>
+            <button onClick={() => setShowLogin(true)}>Ücretsiz Başla</button>
+          </div>
+
+          <div className="pricing-card featured">
+            <div className="pricing-label">En Popüler</div>
+            <h3>Pro Plan</h3>
+            <div className="pricing-price">
+              149 TL <span>/ ay</span>
+            </div>
+            <ul>
+              <li>✅ Sınırsız ürün</li>
+              <li>✅ Gelişmiş stok takibi</li>
+              <li>✅ Kategori yönetimi</li>
+              <li>✅ Gelişmiş maliyet raporları</li>
+            </ul>
+            <button onClick={() => setShowLogin(true)}>Pro’ya Geç</button>
+          </div>
+
+          <div className="pricing-card">
+            <h3>Business Plan</h3>
+            <div className="pricing-price">
+              299 TL <span>/ ay</span>
+            </div>
+            <ul>
+              <li>✅ Firma hesabı</li>
+              <li>✅ Çoklu kullanıcı desteği</li>
+              <li>✅ Gelişmiş finans takibi</li>
+              <li>✅ Kurumsal destek</li>
+            </ul>
+            <button onClick={() => setShowLogin(true)}>İletişime Geç</button>
+          </div>
+        </section>
+
+        <div className="landing-section-title" id="faq">
+          <span>SSS</span>
+          <h2>Sık sorulan sorular</h2>
+        </div>
+
+        <section className="faq-section">
+          <div className="faq-card">
+            <h3>Verilerim başkasına görünür mü?</h3>
+            <p>
+              Hayır. Her kullanıcı kendi hesabına bağlı ürün ve maliyet
+              kayıtlarını görür.
+            </p>
+          </div>
+
+          <div className="faq-card">
+            <h3>Telefondan kullanabilir miyim?</h3>
+            <p>
+              Evet. Web tabanlı olduğu için telefon ve bilgisayardan aynı
+              hesaba giriş yapılabilir.
+            </p>
+          </div>
+
+          <div className="faq-card">
+            <h3>Free planda sınır var mı?</h3>
+            <p>
+              Evet. Free Plan’da 20 ürün sınırı vardır. Pro Plan’da ürün sınırı
+              kaldırılır.
+            </p>
+          </div>
+
+          <div className="faq-card">
+            <h3>Ödeme sistemi aktif mi?</h3>
+            <p>
+              Şu an demo durumundadır. iyzico veya PayTR gibi ödeme altyapısı
+              bağlanarak gerçek abonelik sistemi kurulabilir.
+            </p>
           </div>
         </section>
       </div>
@@ -941,7 +1194,7 @@ function App() {
           <p>
             {authMode === "login"
               ? "Stok sistemine erişmek için mail ve şifrenizi girin."
-              : "7 gün ücretsiz deneme için hesap oluşturun."}
+              : "Free Plan ile hesap oluşturun. 20 ürün limitiyle başlayın."}
           </p>
 
           <button
@@ -1087,7 +1340,7 @@ function App() {
           {session.user.email}
           <br />
           <br />
-          Supabase senkron aktif
+          {isAdmin ? "Admin hesap aktif" : "Supabase senkron aktif"}
         </p>
       </aside>
 
@@ -1173,6 +1426,16 @@ function App() {
                 </p>
               </div>
             </header>
+
+            {!canAddMoreProducts && (
+              <section className="panel">
+                <h3>Free Plan Limiti</h3>
+                <p className="empty">
+                  Free Plan’da 20 ürün sınırına ulaştınız. Daha fazla ürün için
+                  Pro plana geçmeniz gerekir.
+                </p>
+              </section>
+            )}
 
             <div className="search-box">
               <input
@@ -1574,31 +1837,40 @@ function App() {
                 <h3>Abonelik Planı</h3>
 
                 <div className="plan-badge">
-                  {profile?.plan === "pro" ? "Pro Plan" : "Free Plan"}
+                  {isAdmin
+                    ? "Admin Plan"
+                    : profile?.plan === "pro"
+                    ? "Pro Plan"
+                    : profile?.plan === "business"
+                    ? "Business Plan"
+                    : "Free Plan"}
                 </div>
 
                 <p>
-                  Şu anda 7 günlük ücretsiz deneme sürümündesiniz. Deneme
-                  süresi sonunda plan yükseltme alanı aktif edilebilir.
+                  {isAdmin
+                    ? "Bu hesap yönetici hesabıdır. Ürün sınırı yoktur ve tüm premium özellikler açıktır."
+                    : "Şu anda Free Plan kullanıyorsunuz. Free Plan'da 20 ürün sınırı vardır. Daha fazla ürün için Pro plana geçebilirsiniz."}
                 </p>
 
                 <div className="settings-row">
                   <span>Plan</span>
-                  <strong>{profile?.plan || "free"}</strong>
+                  <strong>{isAdmin ? "admin" : profile?.plan || "free"}</strong>
                 </div>
 
                 <div className="settings-row">
-                  <span>Deneme Süresi</span>
-                  <strong>7 Gün</strong>
+                  <span>Ürün Limiti</span>
+                  <strong>
+                    {isAdmin || isPro ? "Sınırsız" : `${products.length} / 20`}
+                  </strong>
                 </div>
 
                 <div className="settings-row">
                   <span>Ödeme Durumu</span>
-                  <strong>Demo / Pasif</strong>
+                  <strong>{isAdmin ? "Yönetici" : "Demo / Pasif"}</strong>
                 </div>
 
                 <button className="primary" disabled>
-                  Plan Yükseltme Yakında
+                  {isAdmin ? "Admin Yetkisi Aktif" : "Plan Yükseltme Yakında"}
                 </button>
               </div>
             </section>
