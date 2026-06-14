@@ -441,9 +441,10 @@ function App() {
       min-height: 100vh;
       box-sizing: border-box;
       background:
-        radial-gradient(circle at top right, rgba(0, 173, 181, 0.3), transparent 34%),
-        linear-gradient(135deg, #111827, #0f172a);
-      color: white;
+        radial-gradient(circle at top right, rgba(20, 184, 166, 0.22), transparent 32%),
+        radial-gradient(circle at bottom left, rgba(125, 211, 252, 0.28), transparent 30%),
+        linear-gradient(135deg, #f8fdff 0%, #eefcff 45%, #ffffff 100%);
+      color: #0f172a;
       padding: 28px;
       font-family: Arial, Helvetica, sans-serif;
     }
@@ -455,19 +456,25 @@ function App() {
       align-items: center;
       justify-content: space-between;
       gap: 20px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+      backdrop-filter: blur(18px);
+      border-radius: 28px;
+      padding: 18px 26px;
     }
 
     .landing-logo h1 {
       margin: 0;
       font-size: 28px;
       letter-spacing: 3px;
-      color: white;
+      color: #0f172a;
     }
 
     .landing-logo span {
       display: block;
       margin-top: 6px;
-      color: #00adb5;
+      color: #0891b2;
       font-weight: 800;
       letter-spacing: 2px;
     }
@@ -480,7 +487,7 @@ function App() {
     }
 
     .landing-nav a {
-      color: #cbd5e1;
+      color: #334155;
       text-decoration: none;
       font-weight: 800;
     }
@@ -488,33 +495,34 @@ function App() {
     .landing-nav button,
     .hero-buttons button {
       border: 0;
-      background: linear-gradient(135deg, #00adb5, #14b8a6);
+      background: linear-gradient(135deg, #06b6d4, #14b8a6);
       color: white;
       padding: 13px 22px;
       border-radius: 999px;
       font-weight: 900;
       cursor: pointer;
-      box-shadow: 0 15px 35px rgba(0, 173, 181, 0.25);
+      box-shadow: 0 18px 38px rgba(20, 184, 166, 0.28);
     }
 
     .hero-section {
       max-width: 1180px;
       margin: 90px auto 70px;
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
+      grid-template-columns: 1.05fr 0.95fr;
       gap: 42px;
       align-items: center;
     }
 
     .hero-badge {
       display: inline-block;
-      background: rgba(0, 173, 181, 0.15);
-      border: 1px solid rgba(0, 173, 181, 0.35);
-      color: #67e8f9;
+      background: rgba(20, 184, 166, 0.12);
+      border: 1px solid rgba(20, 184, 166, 0.28);
+      color: #0f766e;
       padding: 9px 14px;
       border-radius: 999px;
       font-weight: 900;
       margin-bottom: 20px;
+      box-shadow: 0 14px 35px rgba(20, 184, 166, 0.12);
     }
 
     .hero-text h2 {
@@ -522,12 +530,12 @@ function App() {
       font-size: 58px;
       line-height: 1.05;
       letter-spacing: -2px;
-      color: white;
+      color: #0f172a;
       text-align: left;
     }
 
     .hero-text p {
-      color: #cbd5e1;
+      color: #475569;
       font-size: 18px;
       line-height: 1.7;
       max-width: 620px;
@@ -546,9 +554,10 @@ function App() {
       padding: 15px 22px;
       border-radius: 16px;
       font-weight: 900;
-      background: rgba(255, 255, 255, 0.09);
-      color: white;
-      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: #0f766e;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(20, 184, 166, 0.28);
+      box-shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
     }
 
     .hero-mini-stats {
@@ -558,116 +567,81 @@ function App() {
       flex-wrap: wrap;
     }
 
-    .hero-mini-stats div,
-    .dashboard-grid div,
-    .dashboard-product,
-    .feature-card,
-    .workflow-section div,
-    .pricing-card,
-    .faq-card {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.13);
+    .hero-mini-stats div {
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      box-shadow: 0 16px 36px rgba(15, 23, 42, 0.07);
       border-radius: 22px;
       padding: 18px;
-      color: white;
     }
 
     .hero-mini-stats strong {
       display: block;
-      color: white;
+      color: #0f172a;
       font-size: 18px;
     }
 
     .hero-mini-stats span {
       display: block;
-      color: #cbd5e1;
+      color: #64748b;
       font-size: 13px;
       margin-top: 4px;
     }
 
-    .hero-dashboard {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.16);
+    .hero-visual-card {
+      position: relative;
       border-radius: 34px;
-      padding: 28px;
-      backdrop-filter: blur(16px);
-      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.32);
-    }
-
-    .dashboard-top {
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      box-shadow: 0 30px 90px rgba(15, 23, 42, 0.16);
+      padding: 14px;
+      min-height: 430px;
       display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 22px;
-    }
-
-    .dashboard-top span {
-      color: #94a3b8;
-      font-weight: 800;
-      font-size: 13px;
-    }
-
-    .dashboard-top h3 {
-      margin: 6px 0 0;
-      font-size: 28px;
-      color: white;
-    }
-
-    .dashboard-top strong {
-      background: rgba(34, 197, 94, 0.18);
-      color: #86efac;
-      padding: 8px 13px;
-      border-radius: 999px;
-      font-size: 13px;
-    }
-
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 18px;
-    }
-
-    .dashboard-grid span {
-      display: block;
-      color: #cbd5e1;
-      font-size: 13px;
-      margin-bottom: 8px;
-    }
-
-    .dashboard-grid strong {
-      font-size: 24px;
-      color: white;
-    }
-
-    .dashboard-product {
-      display: flex;
-      justify-content: space-between;
-      gap: 14px;
-      margin-top: 12px;
       align-items: center;
+      justify-content: center;
     }
 
-    .dashboard-product h4 {
-      margin: 0;
-      font-size: 17px;
-      color: white;
+    .hero-visual-card img {
+      width: 100%;
+      height: 100%;
+      min-height: 400px;
+      object-fit: cover;
+      border-radius: 26px;
+      display: block;
     }
 
-    .dashboard-product p {
-      margin: 6px 0 0;
-      color: #cbd5e1;
-      font-size: 13px;
+    .hero-floating-card {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+      border-radius: 20px;
+      padding: 14px 18px;
+      backdrop-filter: blur(12px);
     }
 
-    .dashboard-product span {
-      background: linear-gradient(135deg, #00adb5, #14b8a6);
-      padding: 7px 11px;
-      border-radius: 999px;
+    .hero-floating-card strong {
+      display: block;
+      color: #0f172a;
+      font-size: 23px;
       font-weight: 900;
-      white-space: nowrap;
+    }
+
+    .hero-floating-card span {
+      color: #64748b;
       font-size: 13px;
-      color: white;
+      font-weight: 800;
+    }
+
+    .card-one {
+      top: 24px;
+      left: 24px;
+    }
+
+    .card-two {
+      right: 24px;
+      bottom: 24px;
     }
 
     .landing-section-title {
@@ -677,7 +651,7 @@ function App() {
     }
 
     .landing-section-title span {
-      color: #67e8f9;
+      color: #0891b2;
       font-weight: 900;
       letter-spacing: 2px;
     }
@@ -685,22 +659,58 @@ function App() {
     .landing-section-title h2 {
       margin: 12px 0;
       font-size: 38px;
-      color: white;
+      color: #0f172a;
     }
 
     .landing-section-title p {
       margin: 0 auto;
       max-width: 680px;
-      color: #cbd5e1;
+      color: #475569;
       line-height: 1.7;
     }
 
-    .features-section {
+    .features-section,
+    .workflow-section,
+    .pricing-section,
+    .faq-section {
       max-width: 1180px;
-      margin: 0 auto 70px;
+      margin-left: auto;
+      margin-right: auto;
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
       gap: 18px;
+    }
+
+    .features-section {
+      grid-template-columns: repeat(4, 1fr);
+      margin-bottom: 70px;
+    }
+
+    .workflow-section {
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 28px;
+      margin-bottom: 80px;
+    }
+
+    .pricing-section {
+      grid-template-columns: repeat(3, 1fr);
+      margin-bottom: 80px;
+    }
+
+    .faq-section {
+      grid-template-columns: repeat(2, 1fr);
+      margin-bottom: 80px;
+    }
+
+    .feature-card,
+    .workflow-section div,
+    .pricing-card,
+    .faq-card {
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      box-shadow: 0 18px 42px rgba(15, 23, 42, 0.07);
+      border-radius: 22px;
+      padding: 18px;
+      color: #0f172a;
     }
 
     .feature-card div {
@@ -710,38 +720,24 @@ function App() {
 
     .feature-card h3,
     .workflow-section h3,
+    .pricing-card h3,
     .faq-card h3 {
-      color: white;
+      color: #0f172a;
+      margin-top: 0;
     }
 
     .feature-card p,
     .workflow-section p,
     .faq-card p {
       margin: 0;
-      color: #cbd5e1;
+      color: #475569;
       line-height: 1.6;
     }
 
-    .workflow-section {
-      max-width: 1180px;
-      margin: 28px auto 80px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-
     .workflow-section span {
-      color: #67e8f9;
+      color: #0891b2;
       font-weight: 900;
       letter-spacing: 2px;
-    }
-
-    .pricing-section {
-      max-width: 1180px;
-      margin: 0 auto 80px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
     }
 
     .pricing-card {
@@ -750,10 +746,10 @@ function App() {
     }
 
     .pricing-card.featured {
-      border-color: rgba(0, 173, 181, 0.65);
       background:
-        radial-gradient(circle at top right, rgba(0, 173, 181, 0.22), transparent 35%),
-        rgba(255, 255, 255, 0.1);
+        radial-gradient(circle at top right, rgba(20, 184, 166, 0.18), transparent 34%),
+        rgba(255, 255, 255, 0.92);
+      border: 2px solid rgba(20, 184, 166, 0.35);
       transform: translateY(-10px);
     }
 
@@ -761,7 +757,7 @@ function App() {
       position: absolute;
       top: 18px;
       right: 18px;
-      background: linear-gradient(135deg, #00adb5, #14b8a6);
+      background: linear-gradient(135deg, #06b6d4, #14b8a6);
       color: white;
       padding: 7px 11px;
       border-radius: 999px;
@@ -769,21 +765,15 @@ function App() {
       font-weight: 900;
     }
 
-    .pricing-card h3 {
-      margin: 0 0 12px;
-      color: white;
-      font-size: 24px;
-    }
-
     .pricing-price {
       font-size: 38px;
       font-weight: 900;
-      color: white;
+      color: #0f172a;
       margin-bottom: 16px;
     }
 
     .pricing-price span {
-      color: #cbd5e1;
+      color: #475569;
       font-size: 15px;
       font-weight: 700;
     }
@@ -795,34 +785,26 @@ function App() {
     }
 
     .pricing-card li {
-      color: #cbd5e1;
+      color: #475569;
       margin-bottom: 11px;
       line-height: 1.5;
     }
 
     .pricing-card button {
       width: 100%;
-      border: 0;
       border-radius: 16px;
       padding: 14px;
       font-weight: 900;
       cursor: pointer;
-      color: white;
-      background: rgba(255, 255, 255, 0.12);
-      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: #0f766e;
+      background: rgba(240, 253, 250, 0.9);
+      border: 1px solid rgba(20, 184, 166, 0.28);
     }
 
     .pricing-card.featured button {
-      background: linear-gradient(135deg, #00adb5, #14b8a6);
+      color: white;
+      background: linear-gradient(135deg, #06b6d4, #14b8a6);
       border: 0;
-    }
-
-    .faq-section {
-      max-width: 1180px;
-      margin: 0 auto 80px;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
     }
 
     @media (max-width: 900px) {
@@ -848,6 +830,14 @@ function App() {
       .pricing-card.featured {
         transform: none;
       }
+
+      .hero-visual-card {
+        min-height: auto;
+      }
+
+      .hero-visual-card img {
+        min-height: 320px;
+      }
     }
 
     @media (max-width: 560px) {
@@ -859,6 +849,8 @@ function App() {
         align-items: flex-start;
         gap: 16px;
         flex-direction: column;
+        border-radius: 22px;
+        padding: 18px;
       }
 
       .hero-text h2 {
@@ -879,17 +871,24 @@ function App() {
         text-align: center;
       }
 
-      .dashboard-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .dashboard-product {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
       .hero-mini-stats {
         flex-direction: column;
+      }
+
+      .hero-visual-card {
+        padding: 10px;
+        flex-direction: column;
+      }
+
+      .hero-visual-card img {
+        min-height: 260px;
+      }
+
+      .hero-floating-card {
+        position: static;
+        margin-top: 10px;
+        width: 100%;
+        box-sizing: border-box;
       }
     }
   `;
@@ -953,48 +952,20 @@ function App() {
             </div>
           </div>
 
-          <div className="hero-dashboard">
-            <div className="dashboard-top">
-              <div>
-                <span>Örnek Önizleme</span>
-                <h3>Stok Paneli</h3>
-              </div>
-              <strong>Demo</strong>
+          <div className="hero-visual-card">
+            <img
+              src="/hero-3d-stock.svg"
+              alt="3D stok takip ve maliyet yönetim paneli"
+            />
+
+            <div className="hero-floating-card card-one">
+              <strong>+248</strong>
+              <span>Takip edilen ürün</span>
             </div>
 
-            <div className="dashboard-grid">
-              <div>
-                <span>Ürün Yönetimi</span>
-                <strong>Kolay</strong>
-              </div>
-              <div>
-                <span>Stok Takibi</span>
-                <strong>Senkron</strong>
-              </div>
-              <div>
-                <span>Maliyet</span>
-                <strong>Hesapla</strong>
-              </div>
-              <div>
-                <span>Plan</span>
-                <strong>Pro</strong>
-              </div>
-            </div>
-
-            <div className="dashboard-product">
-              <div>
-                <h4>Demo Ürün</h4>
-                <p>PLA • Beyaz • Aydınlatma</p>
-              </div>
-              <span>Stok Takibi</span>
-            </div>
-
-            <div className="dashboard-product">
-              <div>
-                <h4>Demo Maliyet</h4>
-                <p>Filament • İşçilik • Kâr Oranı</p>
-              </div>
-              <span>Hesaplama</span>
+            <div className="hero-floating-card card-two">
+              <strong>₺58,40</strong>
+              <span>Ortalama maliyet</span>
             </div>
           </div>
         </section>
@@ -1024,7 +995,9 @@ function App() {
           <div className="feature-card">
             <div>💰</div>
             <h3>Maliyet Hesabı</h3>
-            <p>Filament, elektrik, işçilik ve kâr oranına göre fiyat hesaplayın.</p>
+            <p>
+              Filament, elektrik, işçilik ve kâr oranına göre fiyat hesaplayın.
+            </p>
           </div>
 
           <div className="feature-card">
@@ -1136,7 +1109,9 @@ function App() {
 
           <div className="faq-card">
             <h3>Ödeme sistemi aktif mi?</h3>
-            <p>Şu an demo durumundadır. Sonradan iyzico veya PayTR bağlanabilir.</p>
+            <p>
+              Şu an demo durumundadır. Sonradan iyzico veya PayTR bağlanabilir.
+            </p>
           </div>
         </section>
       </div>
