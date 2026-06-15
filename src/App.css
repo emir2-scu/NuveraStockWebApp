@@ -1987,6 +1987,13 @@ select:focus {
   .highlighted-plan {
     transform: none;
   }
+  .hero-seo-text {
+  margin-top: 16px;
+  max-width: 560px;
+  color: #5f6f7a;
+  font-size: 15px;
+  line-height: 1.7;
+}
 }
 }
 }
