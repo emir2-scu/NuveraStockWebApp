@@ -51,21 +51,35 @@ function App() {
 
   useEffect(() => {
     const getCurrentSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      setSession(data.session);
-      setAuthLoading(false);
+      try {
+        const { data, error } = await supabase.auth.getSession();
+
+        if (error) {
+          console.log("Session alınırken hata:", error.message);
+          setSession(null);
+          return;
+        }
+
+        setSession(data?.session || null);
+      } catch (error) {
+        console.log("Beklenmeyen session hatası:", error);
+        setSession(null);
+      } finally {
+        setAuthLoading(false);
+      }
     };
 
     getCurrentSession();
 
-    const { data } = supabase.auth.onAuthStateChange(
-      (_event, currentSession) => {
-        setSession(currentSession);
-      }
-    );
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, currentSession) => {
+      setSession(currentSession);
+      setAuthLoading(false);
+    });
 
     return () => {
-      data.subscription.unsubscribe();
+      subscription.unsubscribe();
     };
   }, []);
 
@@ -1053,8 +1067,8 @@ function App() {
 
         <header className="landing-header">
           <div className="landing-logo">
-            <h1>3D STOK TAKİP</h1>
-            <span>Akıllı stok ve maliyet yönetimi</span>
+            <h1>NUVERA STOCK</h1>
+            <span>3D baskı stok ve maliyet takip sistemi</span>
           </div>
 
           <nav className="landing-nav">
@@ -1069,15 +1083,16 @@ function App() {
         <section className="hero-section">
           <div className="hero-text">
             <span className="hero-badge">
-              3D Ürünler İçin Web Tabanlı Takip Sistemi
+              3D Baskı Üreticileri İçin Web Tabanlı Takip Sistemi
             </span>
 
-            <h2>Stok, maliyet ve satış fiyatı tek panelde.</h2>
+            <h2>3D Baskı Ürünleriniz İçin Stok ve Maliyet Takip Sistemi</h2>
 
             <p>
-              3D baskı ürünlerinizi kategori, malzeme, renk ve stok bilgileriyle
-              yönetin. Maliyetleri hesaplayın, satış fiyatını belirleyin ve tüm
-              verilerinize telefon ya da bilgisayardan ulaşın.
+              Nuvera Stock ile 3D baskı ürünlerinizi kategori, malzeme, renk ve
+              stok bilgileriyle yönetin. Üretim maliyetlerini hesaplayın, satış
+              fiyatını belirleyin ve tüm verilerinize telefon ya da bilgisayardan
+              güvenle ulaşın.
             </p>
 
             <div className="hero-buttons">
