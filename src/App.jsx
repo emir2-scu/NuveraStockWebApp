@@ -127,23 +127,33 @@ function App() {
   };
 
   const signIn = async () => {
-    if (!authForm.email || !authForm.password) {
+    const cleanEmail = authForm.email.trim();
+
+    if (!cleanEmail || !authForm.password) {
       alert("Mail ve şifre boş bırakılamaz.");
       return;
     }
 
     const { error } = await supabase.auth.signInWithPassword({
-      email: authForm.email,
+      email: cleanEmail,
       password: authForm.password,
     });
 
     if (error) {
       alert("Giriş yapılamadı: " + error.message);
+      return;
     }
+
+    setAuthForm({
+      email: "",
+      password: "",
+    });
   };
 
   const signUp = async () => {
-    if (!authForm.email || !authForm.password) {
+    const cleanEmail = authForm.email.trim();
+
+    if (!cleanEmail || !authForm.password) {
       alert("Mail ve şifre boş bırakılamaz.");
       return;
     }
@@ -154,7 +164,7 @@ function App() {
     }
 
     const { error } = await supabase.auth.signUp({
-      email: authForm.email,
+      email: cleanEmail,
       password: authForm.password,
     });
 
@@ -165,6 +175,10 @@ function App() {
 
     alert("Kayıt oluşturuldu. Şimdi aynı mail ve şifreyle giriş yapabilirsin.");
     setAuthMode("login");
+    setAuthForm({
+      email: cleanEmail,
+      password: "",
+    });
   };
 
   const signOut = async () => {
@@ -836,6 +850,7 @@ function App() {
     }
 
     .features-section,
+    .why-section,
     .workflow-section,
     .pricing-section,
     .faq-section {
@@ -844,6 +859,66 @@ function App() {
       margin-right: auto;
       display: grid;
       gap: 18px;
+    }
+
+    .why-section {
+      grid-template-columns: repeat(4, 1fr);
+      margin-bottom: 34px;
+    }
+
+    .why-card {
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      box-shadow: 0 18px 42px rgba(15, 23, 42, 0.07);
+      border-radius: 22px;
+      padding: 22px;
+      color: #0f172a;
+    }
+
+    .why-card div {
+      font-size: 34px;
+      margin-bottom: 14px;
+    }
+
+    .why-card h3 {
+      margin: 0 0 10px;
+      color: #0f172a;
+      font-size: 20px;
+    }
+
+    .why-card p {
+      margin: 0;
+      color: #475569;
+      line-height: 1.6;
+    }
+
+    .trust-section {
+      max-width: 1180px;
+      margin: 0 auto 78px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .trust-section div {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.12), rgba(20, 184, 166, 0.12));
+      border: 1px solid rgba(20, 184, 166, 0.22);
+      border-radius: 22px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .trust-section strong {
+      display: block;
+      color: #0f766e;
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+
+    .trust-section span {
+      color: #475569;
+      font-weight: 700;
+      font-size: 14px;
     }
 
     .features-section {
@@ -984,7 +1059,9 @@ function App() {
       }
 
       .features-section,
-      .pricing-section {
+      .why-section,
+      .pricing-section,
+      .trust-section {
         grid-template-columns: repeat(2, 1fr);
       }
 
@@ -1016,7 +1093,9 @@ function App() {
       }
 
       .features-section,
-      .pricing-section {
+      .why-section,
+      .pricing-section,
+      .trust-section {
         grid-template-columns: 1fr;
       }
 
@@ -1073,6 +1152,7 @@ function App() {
 
           <nav className="landing-nav">
             <a href="#features">Özellikler</a>
+            <a href="#why-us">Neden Nuvera?</a>
             <a href="#workflow">Nasıl Çalışır?</a>
             <a href="#pricing">Fiyatlandırma</a>
             <a href="#faq">SSS</a>
@@ -1186,6 +1266,72 @@ function App() {
               <strong>₺58,40</strong>
               <span>Ortalama maliyet</span>
             </div>
+          </div>
+        </section>
+
+        <div className="landing-section-title" id="why-us">
+          <span>NEDEN NUVERA STOCK?</span>
+          <h2>3D baskı işinizi daha düzenli ve kontrollü yönetin</h2>
+          <p>
+            Nuvera Stock, 3D baskı ile ürün üreten kişilerin stok, malzeme,
+            maliyet ve satış fiyatı süreçlerini tek bir panelden yönetebilmesi
+            için geliştirildi.
+          </p>
+        </div>
+
+        <section className="why-section">
+          <div className="why-card">
+            <div>🎯</div>
+            <h3>3D baskıya özel yapı</h3>
+            <p>
+              Genel stok programları yerine filament, üretim maliyeti, stok
+              adedi ve satış fiyatı gibi 3D baskıya özel ihtiyaçlara odaklanır.
+            </p>
+          </div>
+
+          <div className="why-card">
+            <div>⏱️</div>
+            <h3>Zaman kazandırır</h3>
+            <p>
+              Ürünleri, malzemeleri ve maliyetleri ayrı ayrı not almak yerine
+              hepsini tek panelde düzenli şekilde takip edebilirsiniz.
+            </p>
+          </div>
+
+          <div className="why-card">
+            <div>💸</div>
+            <h3>Kârınızı görmenizi sağlar</h3>
+            <p>
+              Filament, elektrik, işçilik, paketleme ve ekstra giderleri hesaba
+              katarak ürünün tahmini satış fiyatını daha doğru belirlemenize
+              yardımcı olur.
+            </p>
+          </div>
+
+          <div className="why-card">
+            <div>📱</div>
+            <h3>Her cihazdan erişim</h3>
+            <p>
+              Web tabanlı olduğu için stok ve maliyet bilgilerinize bilgisayar,
+              tablet veya telefondan aynı hesapla ulaşabilirsiniz.
+            </p>
+          </div>
+        </section>
+
+        <section className="trust-section">
+          <div>
+            <strong>Free Plan</strong>
+            <span>20 ürüne kadar ücretsiz başlangıç</span>
+          </div>
+
+          <div>
+            <strong>Güvenli Veri</strong>
+            <span>Her kullanıcı sadece kendi verilerini görür</span>
+          </div>
+
+          <div>
+            <strong>3D Baskı Odaklı</strong>
+            <span>Stok, malzeme ve maliyet aynı panelde</span>
           </div>
         </section>
 
