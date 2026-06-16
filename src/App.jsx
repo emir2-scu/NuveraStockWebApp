@@ -1345,6 +1345,157 @@ function App() {
     padding: 18px;
   }
 }
+  .target-users-section {
+  max-width: 1180px;
+  margin: 0 auto 80px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 18px;
+}
+
+.target-user-card {
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.07);
+  border-radius: 24px;
+  padding: 22px;
+  color: #0f172a;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.target-user-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 26px 56px rgba(15, 23, 42, 0.12);
+}
+
+.target-user-card div {
+  font-size: 34px;
+  margin-bottom: 14px;
+}
+
+.target-user-card h3 {
+  margin: 0 0 10px;
+  color: #0f172a;
+  font-size: 18px;
+}
+
+.target-user-card p {
+  margin: 0;
+  color: #475569;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.problem-solution-section {
+  max-width: 1180px;
+  margin: 0 auto 80px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+
+.problem-card,
+.solution-card {
+  border-radius: 30px;
+  padding: 32px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.1);
+}
+
+.problem-card {
+  background:
+    radial-gradient(circle at top left, rgba(248, 113, 113, 0.16), transparent 36%),
+    rgba(255, 255, 255, 0.88);
+}
+
+.solution-card {
+  background:
+    radial-gradient(circle at top right, rgba(20, 184, 166, 0.2), transparent 36%),
+    rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(20, 184, 166, 0.22);
+}
+
+.problem-card span,
+.solution-card span {
+  display: inline-block;
+  font-weight: 900;
+  letter-spacing: 2px;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.problem-card span {
+  color: #dc2626;
+}
+
+.solution-card span {
+  color: #0f766e;
+}
+
+.problem-card h3,
+.solution-card h3 {
+  margin: 0 0 16px;
+  color: #0f172a;
+  font-size: 30px;
+  line-height: 1.18;
+}
+
+.problem-card p,
+.solution-card p {
+  margin: 0 0 18px;
+  color: #475569;
+  line-height: 1.7;
+}
+
+.problem-list,
+.solution-list {
+  display: grid;
+  gap: 12px;
+}
+
+.problem-list div,
+.solution-list div {
+  border-radius: 16px;
+  padding: 14px 16px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.problem-list div {
+  background: rgba(254, 226, 226, 0.75);
+  border: 1px solid rgba(248, 113, 113, 0.22);
+}
+
+.solution-list div {
+  background: rgba(240, 253, 250, 0.9);
+  border: 1px solid rgba(20, 184, 166, 0.22);
+}
+
+@media (max-width: 900px) {
+  .target-users-section {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .problem-solution-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .target-users-section {
+    grid-template-columns: 1fr;
+  }
+
+  .problem-card h3,
+  .solution-card h3 {
+    font-size: 24px;
+  }
+
+  .problem-card,
+  .solution-card {
+    padding: 24px;
+  }
+}
   `;
 
   if (authLoading) {
@@ -1362,14 +1513,16 @@ function App() {
             <span>3D baskı stok ve maliyet takip sistemi</span>
           </div>
 
-          <nav className="landing-nav">
-            <a href="#features">Özellikler</a>
-            <a href="#why-us">Neden Nuvera?</a>
-            <a href="#workflow">Nasıl Çalışır?</a>
-            <a href="#pricing">Fiyatlandırma</a>
-            <a href="#faq">SSS</a>
-            <button onClick={() => setShowLogin(true)}>Giriş Yap</button>
-          </nav>
+    <nav className="landing-nav">
+  <a href="#features">Özellikler</a>
+  <a href="#why-us">Neden Nuvera?</a>
+  <a href="#target-users">Kimler İçin?</a>
+  <a href="#problem-solution">Çözüm</a>
+  <a href="#workflow">Nasıl Çalışır?</a>
+  <a href="#pricing">Fiyatlandırma</a>
+  <a href="#faq">SSS</a>
+  <button onClick={() => setShowLogin(true)}>Giriş Yap</button>
+</nav>
         </header>
 
         <section className="hero-section">
@@ -1628,6 +1781,108 @@ function App() {
     </div>
   </div>
 </section>
+
+<div className="landing-section-title" id="target-users">
+  <span>KİMLER İÇİN?</span>
+  <h2>Nuvera Stock, 3D baskı işi yapan herkes için tasarlandı</h2>
+  <p>
+    Hobi üretiminden satış yapan küçük işletmelere kadar, ürünlerini ve
+    maliyetlerini düzenli takip etmek isteyen herkes için pratik bir sistemdir.
+  </p>
+</div>
+
+<section className="target-users-section">
+  <div className="target-user-card">
+    <div>🧩</div>
+    <h3>3D Baskı Üreticileri</h3>
+    <p>
+      Ürünlerini, stoklarını ve üretim detaylarını düzenli şekilde takip etmek
+      isteyen üreticiler için.
+    </p>
+  </div>
+
+  <div className="target-user-card">
+    <div>🏪</div>
+    <h3>Küçük İşletmeler</h3>
+    <p>
+      Sipariş, stok ve maliyet takibini Excel yerine daha sade bir panelden
+      yönetmek isteyen işletmeler için.
+    </p>
+  </div>
+
+  <div className="target-user-card">
+    <div>🎨</div>
+    <h3>Tasarımcılar</h3>
+    <p>
+      Farklı ürün, renk, malzeme ve prototiplerini düzenli kaydetmek isteyen
+      tasarımcılar için.
+    </p>
+  </div>
+
+  <div className="target-user-card">
+    <div>📦</div>
+    <h3>Stok Takibi Yapanlar</h3>
+    <p>
+      Hangi ürünün azaldığını, hangisinin yeterli olduğunu hızlıca görmek
+      isteyen kullanıcılar için.
+    </p>
+  </div>
+
+  <div className="target-user-card">
+    <div>💰</div>
+    <h3>Maliyet Hesaplayanlar</h3>
+    <p>
+      Filament, elektrik, işçilik ve kâr oranını hesaba katarak satış fiyatı
+      belirlemek isteyenler için.
+    </p>
+  </div>
+</section>
+
+<div className="landing-section-title" id="problem-solution">
+  <span>SORUN VE ÇÖZÜM</span>
+  <h2>Dağınık notlar yerine tek panelden kontrol</h2>
+  <p>
+    Nuvera Stock, 3D baskı sürecinde en çok yaşanan takip karmaşasını sade ve
+    anlaşılır bir sisteme dönüştürür.
+  </p>
+</div>
+
+<section className="problem-solution-section">
+  <div className="problem-card">
+    <span>SORUN</span>
+    <h3>Stok ve maliyet bilgileri farklı yerlerde dağılır</h3>
+    <p>
+      Ürünler bir defterde, maliyetler Excel’de, stok bilgileri ise akılda
+      kalınca üretim süreci karışır ve hata yapma ihtimali artar.
+    </p>
+
+    <div className="problem-list">
+      <div>❌ Hangi ürünün azaldığı net görünmez</div>
+      <div>❌ Gerçek maliyet hesaplamak zorlaşır</div>
+      <div>❌ Satış fiyatı tahmini yapılır</div>
+      <div>❌ Telefon ve bilgisayar arasında veri dağılır</div>
+    </div>
+  </div>
+
+  <div className="solution-card">
+    <span>ÇÖZÜM</span>
+    <h3>Nuvera Stock tüm süreci tek ekranda toplar</h3>
+    <p>
+      Ürünlerinizi, stok seviyelerinizi, malzeme bilgilerinizi ve maliyet
+      hesaplarınızı aynı sistemde tutarak daha kontrollü ilerlemenizi sağlar.
+    </p>
+
+    <div className="solution-list">
+      <div>✅ Ürün ve stok bilgileri tek panelde</div>
+      <div>✅ Maliyet ve satış fiyatı hesabı aynı yerde</div>
+      <div>✅ Düşük stokları hızlı fark etme</div>
+      <div>✅ Telefon ve bilgisayardan senkron kullanım</div>
+    </div>
+  </div>
+</section>
+
+
+
         <div className="landing-section-title" id="features">
           <span>ÖZELLİKLER</span>
           <h2>3D üreticiler için pratik yönetim paneli</h2>
