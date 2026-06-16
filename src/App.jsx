@@ -1133,6 +1133,218 @@ function App() {
         display: none;
       }
     }
+      .stock-showcase {
+  max-width: 1180px;
+  margin: 0 auto 80px;
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 26px;
+  align-items: center;
+}
+
+.stock-showcase-text {
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.07);
+  border-radius: 26px;
+  padding: 30px;
+}
+
+.stock-showcase-text span {
+  display: inline-block;
+  color: #0891b2;
+  font-weight: 900;
+  letter-spacing: 2px;
+  margin-bottom: 14px;
+}
+
+.stock-showcase-text h3 {
+  margin: 0 0 14px;
+  color: #0f172a;
+  font-size: 34px;
+  line-height: 1.15;
+}
+
+.stock-showcase-text p {
+  margin: 0 0 20px;
+  color: #475569;
+  line-height: 1.7;
+}
+
+.stock-showcase-list {
+  display: grid;
+  gap: 12px;
+}
+
+.stock-showcase-list div {
+  background: rgba(240, 253, 250, 0.9);
+  border: 1px solid rgba(20, 184, 166, 0.22);
+  color: #0f172a;
+  border-radius: 16px;
+  padding: 14px 16px;
+  font-weight: 800;
+}
+
+.stock-dashboard-visual {
+  background:
+    radial-gradient(circle at top right, rgba(20, 184, 166, 0.18), transparent 35%),
+    linear-gradient(135deg, #ffffff, #ecfeff);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 28px 70px rgba(15, 23, 42, 0.12);
+  border-radius: 32px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.stock-dashboard-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.stock-dashboard-top h4 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 24px;
+}
+
+.stock-dashboard-top span {
+  background: #dcfce7;
+  color: #15803d;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 12px;
+}
+
+.stock-mini-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.stock-mini-cards div {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #dbeafe;
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+}
+
+.stock-mini-cards strong {
+  display: block;
+  color: #0f172a;
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+
+.stock-mini-cards small {
+  color: #64748b;
+  font-weight: 800;
+}
+
+.stock-product-rows {
+  display: grid;
+  gap: 14px;
+}
+
+.stock-product-row {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.05);
+}
+
+.stock-row-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.stock-row-head strong {
+  color: #0f172a;
+}
+
+.stock-row-head span {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.stock-status-good {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.stock-status-warning {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.stock-status-danger {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.stock-progress {
+  height: 10px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.stock-progress div {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #06b6d4, #14b8a6);
+}
+
+.stock-progress.high div {
+  width: 88%;
+}
+
+.stock-progress.medium div {
+  width: 54%;
+}
+
+.stock-progress.low div {
+  width: 22%;
+}
+
+.stock-row-foot {
+  margin-top: 8px;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+@media (max-width: 900px) {
+  .stock-showcase {
+    grid-template-columns: 1fr;
+  }
+
+  .stock-mini-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .stock-showcase-text h3 {
+    font-size: 26px;
+  }
+
+  .stock-dashboard-visual {
+    padding: 18px;
+  }
+}
   `;
 
   if (authLoading) {
@@ -1334,7 +1546,88 @@ function App() {
             <span>Stok, malzeme ve maliyet aynı panelde</span>
           </div>
         </section>
+<section className="stock-showcase">
+  <div className="stock-showcase-text">
+    <span>STOK TAKİBİ</span>
+    <h3>Stok durumunu tek bakışta gör</h3>
+    <p>
+      Nuvera Stock ile ürünlerinin stok seviyesini daha anlaşılır şekilde
+      takip edebilirsin. Hangi ürün yeterli, hangisi azalıyor, hangisi kritik
+      seviyede; hepsi giriş sayfasında bile net bir görsel dille anlatılır.
+    </p>
 
+    <div className="stock-showcase-list">
+      <div>✅ Düşük stoklu ürünleri hızlı fark et</div>
+      <div>✅ Ürün stoklarını görsel çubuklarla takip et</div>
+      <div>✅ 3D baskı üretimini daha planlı yönet</div>
+    </div>
+  </div>
+
+  <div className="stock-dashboard-visual">
+    <div className="stock-dashboard-top">
+      <h4>Canlı Stok Görünümü</h4>
+      <span>Online Takip</span>
+    </div>
+
+    <div className="stock-mini-cards">
+      <div>
+        <strong>248</strong>
+        <small>Toplam Ürün</small>
+      </div>
+
+      <div>
+        <strong>36</strong>
+        <small>Düşük Stok</small>
+      </div>
+
+      <div>
+        <strong>1.286</strong>
+        <small>Toplam Stok</small>
+      </div>
+    </div>
+
+    <div className="stock-product-rows">
+      <div className="stock-product-row">
+        <div className="stock-row-head">
+          <strong>PLA Filament Standı</strong>
+          <span className="stock-status-good">Yeterli</span>
+        </div>
+
+        <div className="stock-progress high">
+          <div></div>
+        </div>
+
+        <div className="stock-row-foot">Stok seviyesi: 88 adet</div>
+      </div>
+
+      <div className="stock-product-row">
+        <div className="stock-row-head">
+          <strong>ABS Prototip Kutu</strong>
+          <span className="stock-status-warning">Azalıyor</span>
+        </div>
+
+        <div className="stock-progress medium">
+          <div></div>
+        </div>
+
+        <div className="stock-row-foot">Stok seviyesi: 24 adet</div>
+      </div>
+
+      <div className="stock-product-row">
+        <div className="stock-row-head">
+          <strong>PETG Teknik Parça</strong>
+          <span className="stock-status-danger">Kritik</span>
+        </div>
+
+        <div className="stock-progress low">
+          <div></div>
+        </div>
+
+        <div className="stock-row-foot">Stok seviyesi: 6 adet</div>
+      </div>
+    </div>
+  </div>
+</section>
         <div className="landing-section-title" id="features">
           <span>ÖZELLİKLER</span>
           <h2>3D üreticiler için pratik yönetim paneli</h2>
