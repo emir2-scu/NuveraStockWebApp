@@ -6,6 +6,7 @@ function App() {
   const [page, setPage] = useState("dashboard");
   const [products, setProducts] = useState([]);
   const [costs, setCosts] = useState([]);
+  const [salesNotes, setSalesNotes] = useState([]);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -46,8 +47,18 @@ function App() {
     profitRate: "",
   };
 
+  const emptySaleForm = {
+    customerName: "",
+    productId: "",
+    quantity: "1",
+    totalAmount: "",
+    saleDate: new Date().toISOString().slice(0, 10),
+    note: "",
+  };
+
   const [form, setForm] = useState(emptyProductForm);
   const [costForm, setCostForm] = useState(emptyCostForm);
+  const [saleForm, setSaleForm] = useState(emptySaleForm);
 
   useEffect(() => {
     const getCurrentSession = async () => {
@@ -88,6 +99,7 @@ function App() {
       fetchProfile();
       fetchProducts();
       fetchCosts();
+      fetchSalesNotes();
     }
   }, [session]);
 
@@ -185,6 +197,7 @@ function App() {
     await supabase.auth.signOut();
     setProducts([]);
     setCosts([]);
+    setSalesNotes([]);
     setProfile(null);
     setPage("dashboard");
     setShowLogin(false);
@@ -226,10 +239,48 @@ function App() {
     }
   };
 
+  const fetchSalesNotes = async () => {
+    if (!session?.user) return;
+
+    const { data, error } = await supabase
+      .from("sales_notes")
+      .select("*")
+      .eq("user_id", session.user.id)
+      .order("sale_date", { ascending: false })
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      alert("Satış defteri alınırken hata oluştu: " + error.message);
+    } else {
+      setSalesNotes(data || []);
+    }
+  };
+
   const totalStock = products.reduce((sum, p) => sum + Number(p.stock || 0), 0);
   const lowStock = products.filter((p) => Number(p.stock) <= 5).length;
   const totalCost = costs.reduce((sum, c) => sum + Number(c.total_cost || 0), 0);
   const totalSale = costs.reduce((sum, c) => sum + Number(c.sale_price || 0), 0);
+  const actualSalesTotal = salesNotes.reduce(
+    (sum, sale) => sum + Number(sale.total_amount || 0),
+    0
+  );
+  const soldQuantityTotal = salesNotes.reduce(
+    (sum, sale) => sum + Number(sale.quantity || 0),
+    0
+  );
+  const averageSaleAmount =
+    salesNotes.length > 0 ? actualSalesTotal / salesNotes.length : 0;
+
+  const formatCurrency = (value) =>
+    Number(value || 0).toLocaleString("tr-TR", {
+      style: "currency",
+      currency: "TRY",
+    });
+
+  const formatSaleDate = (value) => {
+    if (!value) return "-";
+    return new Date(`${value}T00:00:00`).toLocaleDateString("tr-TR");
+  };
 
   const isAdmin =
     profile?.is_admin === true ||
@@ -459,6 +510,154 @@ function App() {
 
     setCostForm(emptyCostForm);
     await fetchCosts();
+  };
+
+  const saveSaleNote = async () => {
+    if (!session?.user) return;
+
+    const customerName = saleForm.customerName.trim();
+    const selectedProduct = products.find(
+      (product) => String(product.id) === String(saleForm.productId)
+    );
+    const quantity = Number(saleForm.quantity);
+    const totalAmount = Number(saleForm.totalAmount);
+
+    if (!customerName) {
+      alert("Satış yapılan kişinin adını yazınız.");
+      return;
+    }
+
+    if (!selectedProduct) {
+      alert("Lütfen satılan ürünü seçiniz.");
+      return;
+    }
+
+    if (!Number.isInteger(quantity) || quantity <= 0) {
+      alert("Satış adedi 1 veya daha büyük bir tam sayı olmalıdır.");
+      return;
+    }
+
+    if (!Number.isFinite(totalAmount) || totalAmount < 0) {
+      alert("Lütfen geçerli bir satış tutarı giriniz.");
+      return;
+    }
+
+    if (!saleForm.saleDate) {
+      alert("Lütfen satış tarihini seçiniz.");
+      return;
+    }
+
+    if (Number(selectedProduct.stock || 0) < quantity) {
+      alert(
+        `Yetersiz stok. ${selectedProduct.name} için mevcut stok: ${selectedProduct.stock}`
+      );
+      return;
+    }
+
+    const saleRecord = {
+      user_id: session.user.id,
+      customer_name: customerName,
+      product_id: selectedProduct.id,
+      product_name: selectedProduct.name,
+      quantity,
+      total_amount: totalAmount,
+      sale_date: saleForm.saleDate,
+      note: saleForm.note.trim(),
+    };
+
+    const { data: insertedSale, error: insertError } = await supabase
+      .from("sales_notes")
+      .insert([saleRecord])
+      .select()
+      .single();
+
+    if (insertError) {
+      alert("Satış kaydedilirken hata oluştu: " + insertError.message);
+      return;
+    }
+
+    const newStock = Number(selectedProduct.stock || 0) - quantity;
+
+    const { error: stockError } = await supabase
+      .from("products")
+      .update({ stock: newStock })
+      .eq("id", selectedProduct.id)
+      .eq("user_id", session.user.id);
+
+    if (stockError) {
+      await supabase
+        .from("sales_notes")
+        .delete()
+        .eq("id", insertedSale.id)
+        .eq("user_id", session.user.id);
+
+      alert(
+        "Satış kaydı oluşturuldu ancak stok güncellenemedi. Kayıt geri alındı: " +
+          stockError.message
+      );
+      return;
+    }
+
+    setSaleForm({
+      ...emptySaleForm,
+      saleDate: new Date().toISOString().slice(0, 10),
+    });
+
+    await Promise.all([fetchSalesNotes(), fetchProducts()]);
+    alert("Satış kaydedildi ve ürün stoktan düşüldü.");
+  };
+
+  const deleteSaleNote = async (sale) => {
+    if (
+      !confirm(
+        "Bu satış kaydı silinsin mi? Kayıtta bulunan adet ürün stoğuna geri eklenecek."
+      )
+    ) {
+      return;
+    }
+
+    const relatedProduct = products.find(
+      (product) => String(product.id) === String(sale.product_id)
+    );
+
+    let previousStock = null;
+
+    if (relatedProduct) {
+      previousStock = Number(relatedProduct.stock || 0);
+      const restoredStock = previousStock + Number(sale.quantity || 0);
+
+      const { error: restoreError } = await supabase
+        .from("products")
+        .update({ stock: restoredStock })
+        .eq("id", relatedProduct.id)
+        .eq("user_id", session.user.id);
+
+      if (restoreError) {
+        alert("Stok geri eklenemedi: " + restoreError.message);
+        return;
+      }
+    }
+
+    const { error: deleteError } = await supabase
+      .from("sales_notes")
+      .delete()
+      .eq("id", sale.id)
+      .eq("user_id", session.user.id);
+
+    if (deleteError) {
+      if (relatedProduct && previousStock !== null) {
+        await supabase
+          .from("products")
+          .update({ stock: previousStock })
+          .eq("id", relatedProduct.id)
+          .eq("user_id", session.user.id);
+      }
+
+      alert("Satış kaydı silinemedi: " + deleteError.message);
+      return;
+    }
+
+    await Promise.all([fetchSalesNotes(), fetchProducts()]);
   };
 
   const costResult = calculateCost();
@@ -2171,6 +2370,13 @@ function App() {
           </button>
 
           <button
+            className={page === "sales" ? "nav-active" : ""}
+            onClick={() => setPage("sales")}
+          >
+            📝 Satış Defteri
+          </button>
+
+          <button
             className={page === "reports" ? "nav-active" : ""}
             onClick={() => setPage("reports")}
           >
@@ -2597,6 +2803,211 @@ function App() {
                       </strong>
 
                       <span>Kâr Oranı: %{cost.profit_rate}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          </>
+        )}
+
+        {page === "sales" && (
+          <>
+            <header className="page-header">
+              <div>
+                <h2>Satış Defteri</h2>
+                <p>
+                  Satış yapılan kişiyi, ürünü, adedi, tutarı ve teslim notunu
+                  kaydedin. Satış kaydedildiğinde ürün stoğu otomatik azalır.
+                </p>
+              </div>
+
+              <span className="badge">Supabase Senkron</span>
+            </header>
+
+            <section className="stats">
+              <div className="stat-card">
+                <div className="stat-icon">🧾</div>
+                <div>
+                  <span>Satış Kaydı</span>
+                  <strong>{salesNotes.length}</strong>
+                </div>
+              </div>
+
+              <div className="stat-card green">
+                <div className="stat-icon">📦</div>
+                <div>
+                  <span>Satılan Adet</span>
+                  <strong>{soldQuantityTotal}</strong>
+                </div>
+              </div>
+
+              <div className="stat-card yellow">
+                <div className="stat-icon">💳</div>
+                <div>
+                  <span>Toplam Satış</span>
+                  <strong>{formatCurrency(actualSalesTotal)}</strong>
+                </div>
+              </div>
+
+              <div className="stat-card red">
+                <div className="stat-icon">📊</div>
+                <div>
+                  <span>Ortalama Satış</span>
+                  <strong>{formatCurrency(averageSaleAmount)}</strong>
+                </div>
+              </div>
+            </section>
+
+            <section className="grid">
+              <div className="panel form-panel">
+                <h3>Yeni Satış Kaydı</h3>
+
+                <input
+                  type="text"
+                  placeholder="Satış yapılan kişi / müşteri"
+                  value={saleForm.customerName}
+                  onChange={(e) =>
+                    setSaleForm({
+                      ...saleForm,
+                      customerName: e.target.value,
+                    })
+                  }
+                />
+
+                <select
+                  value={saleForm.productId}
+                  onChange={(e) =>
+                    setSaleForm({
+                      ...saleForm,
+                      productId: e.target.value,
+                    })
+                  }
+                >
+                  <option value="">Satılan ürünü seç</option>
+
+                  {products.map((product) => (
+                    <option value={product.id} key={product.id}>
+                      {product.name} — Stok: {product.stock}
+                    </option>
+                  ))}
+                </select>
+
+                <input
+                  type="number"
+                  min="1"
+                  step="1"
+                  placeholder="Satılan adet"
+                  value={saleForm.quantity}
+                  onChange={(e) =>
+                    setSaleForm({
+                      ...saleForm,
+                      quantity: e.target.value,
+                    })
+                  }
+                />
+
+                <input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  placeholder="Toplam satış tutarı"
+                  value={saleForm.totalAmount}
+                  onChange={(e) =>
+                    setSaleForm({
+                      ...saleForm,
+                      totalAmount: e.target.value,
+                    })
+                  }
+                />
+
+                <input
+                  type="date"
+                  value={saleForm.saleDate}
+                  onChange={(e) =>
+                    setSaleForm({
+                      ...saleForm,
+                      saleDate: e.target.value,
+                    })
+                  }
+                />
+
+                <textarea
+                  placeholder="Teslim, ödeme veya satış hakkında not"
+                  value={saleForm.note}
+                  onChange={(e) =>
+                    setSaleForm({
+                      ...saleForm,
+                      note: e.target.value,
+                    })
+                  }
+                />
+
+                {saleForm.productId && (
+                  <div className="result-box">
+                    {(() => {
+                      const selectedProduct = products.find(
+                        (product) =>
+                          String(product.id) === String(saleForm.productId)
+                      );
+
+                      if (!selectedProduct) {
+                        return <p>Ürün bulunamadı.</p>;
+                      }
+
+                      const remainingStock =
+                        Number(selectedProduct.stock || 0) -
+                        Number(saleForm.quantity || 0);
+
+                      return (
+                        <>
+                          <p>Mevcut stok: {selectedProduct.stock} adet</p>
+                          <strong>
+                            Satış sonrası stok: {Math.max(remainingStock, 0)} adet
+                          </strong>
+                        </>
+                      );
+                    })()}
+                  </div>
+                )}
+
+                <button className="primary" onClick={saveSaleNote}>
+                  Satışı Kaydet ve Stoktan Düş
+                </button>
+              </div>
+
+              <div className="panel list-panel">
+                <h3>Kayıtlı Satışlar</h3>
+
+                {salesNotes.length === 0 && (
+                  <p className="empty">Henüz satış kaydı bulunmuyor.</p>
+                )}
+
+                <div className="product-list">
+                  {salesNotes.map((sale) => (
+                    <div className="product-card" key={sale.id}>
+                      <div className="product-info">
+                        <h4>{sale.customer_name}</h4>
+
+                        <div className="product-tags">
+                          <span>{sale.product_name}</span>
+                          <span>{sale.quantity} adet</span>
+                          <span>{formatSaleDate(sale.sale_date)}</span>
+                        </div>
+
+                        <strong>{formatCurrency(sale.total_amount)}</strong>
+
+                        {sale.note && <small>Not: {sale.note}</small>}
+
+                        <div className="stock-actions">
+                          <button
+                            className="danger"
+                            onClick={() => deleteSaleNote(sale)}
+                          >
+                            Kaydı Sil ve Stoğu Geri Ekle
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
