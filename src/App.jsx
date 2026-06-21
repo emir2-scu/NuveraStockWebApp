@@ -246,6 +246,7 @@ function App() {
       .from("sales_notes")
       .select("*")
       .eq("user_id", session.user.id)
+      .eq("is_paid", false)
       .order("sale_date", { ascending: false })
       .order("created_at", { ascending: false });
 
@@ -607,7 +608,34 @@ function App() {
     alert("Satış kaydedildi ve ürün stoktan düşüldü.");
   };
 
-  const deleteSaleNote = async (sale) => {
+  const markSaleAsPaid = async (sale) => {
+    const approved = confirm(
+      `${sale.customer_name} isimli kişiden ${formatCurrency(
+        sale.total_amount
+      )} ödeme alındı mı?\n\nBorç kaydı açık listeden kaldırılacak. Ürün stoğu değişmeyecek.`
+    );
+
+    if (!approved) return;
+
+    const { error } = await supabase
+      .from("sales_notes")
+      .update({
+        is_paid: true,
+        paid_at: new Date().toISOString(),
+      })
+      .eq("id", sale.id)
+      .eq("user_id", session.user.id);
+
+    if (error) {
+      alert("Borç kaydı kapatılamadı: " + error.message);
+      return;
+    }
+
+    await fetchSalesNotes();
+    alert("Ödeme alındı. Borç kaydı kapatıldı ve stok değiştirilmedi.");
+  };
+
+  const cancelSaleNote = async (sale) => {
     if (
       !confirm(
         "Bu satış kaydı silinsin mi? Kayıtta bulunan adet ürün stoğuna geri eklenecek."
@@ -3001,10 +3029,17 @@ function App() {
 
                         <div className="stock-actions">
                           <button
-                            className="danger"
-                            onClick={() => deleteSaleNote(sale)}
+                            className="primary"
+                            onClick={() => markSaleAsPaid(sale)}
                           >
-                            Kaydı Sil ve Stoğu Geri Ekle
+                            ✅ Ücret Alındı — Borcu Kapat
+                          </button>
+
+                          <button
+                            className="danger"
+                            onClick={() => cancelSaleNote(sale)}
+                          >
+                            ❌ Satışı İptal Et ve Stoğu Geri Ekle
                           </button>
                         </div>
                       </div>
